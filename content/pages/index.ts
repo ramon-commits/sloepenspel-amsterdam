@@ -28,6 +28,12 @@ export const homePage = {
     italicWord: "bijzonder",
     headline: "Wat het Sloepenspel bijzonder maakt.",
   },
+  signatureMoment: {
+    eyebrow: "Onze vaarlocaties",
+    italicWord: "Amsterdam",
+    headline: "vanaf het water, jullie kant.",
+    body: "Zes startpunten verspreid over de stad, van de Westerdok tot de Lloyd. Klik op een locatie om te zien wat er voor jullie groep mogelijk is.",
+  },
   reviews: {
     eyebrow: "Wat teams zeggen",
     headline: "Wat teams zeggen na afloop.",
