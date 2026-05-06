@@ -30,14 +30,14 @@ export const metadata: Metadata = {
     title: "Sloepenspel Amsterdam | The Canal Boat Rally for Teams",
     description:
       "The interactive canal boat rally of Amsterdam. Your own boat, 600 stories, for 30-500 people.",
-    images: [{ url: absUrl("/images/hero-bedrijfsuitje.jpg") }],
+    images: [{ url: absUrl("/images/hero-bedrijfsuitje-v5.jpg") }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Sloepenspel Amsterdam | The Canal Boat Rally for Teams",
     description:
       "The interactive canal boat rally of Amsterdam. Your own boat, 600 stories, for 30-500 people.",
-    images: [absUrl("/images/hero-bedrijfsuitje.jpg")],
+    images: [absUrl("/images/hero-bedrijfsuitje-v5.jpg")],
   },
 };
 

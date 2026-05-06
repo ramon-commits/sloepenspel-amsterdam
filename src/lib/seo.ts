@@ -45,7 +45,7 @@ export function localBusinessLd() {
     url: SITE_URL,
     telephone: siteConfig.contact.phone,
     email: siteConfig.contact.email,
-    image: absUrl("/images/hero-bedrijfsuitje.jpg"),
+    image: absUrl("/images/hero-bedrijfsuitje-v5.jpg"),
     address: {
       "@type": "PostalAddress",
       streetAddress: siteConfig.contact.address.street,
@@ -185,7 +185,7 @@ export function locationLd(loc: {
     url: absUrl(`/locaties-groepen#${loc.id}`),
     telephone: siteConfig.contact.phone,
     email: siteConfig.contact.email,
-    image: absUrl("/images/hero-bedrijfsuitje.jpg"),
+    image: absUrl("/images/hero-bedrijfsuitje-v5.jpg"),
     address: {
       "@type": "PostalAddress",
       streetAddress: loc.address,

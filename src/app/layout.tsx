@@ -71,7 +71,7 @@ export const metadata: Metadata = {
     url: "/",
     images: [
       {
-        url: "/images/hero-bedrijfsuitje.jpg",
+        url: "/images/hero-bedrijfsuitje-v5.jpg",
         width: 1920,
         height: 1080,
         alt: "Teams op sloepen aan de Amsterdamse kade",
@@ -82,7 +82,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Sloepenspel Amsterdam",
     description: "Het interactieve bedrijfsuitje op het water, 30 tot 500 personen.",
-    images: ["/images/hero-bedrijfsuitje.jpg"],
+    images: ["/images/hero-bedrijfsuitje-v5.jpg"],
   },
   robots: {
     index: true,
@@ -110,7 +110,7 @@ export default function RootLayout({
         <link
           rel="preload"
           as="image"
-          href="/_next/image?url=%2Fimages%2Fhero-bedrijfsuitje.jpg&w=1920&q=75"
+          href="/images/hero-bedrijfsuitje-v5.jpg"
           fetchPriority="high"
         />
       </head>

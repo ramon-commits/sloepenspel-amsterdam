@@ -9,7 +9,7 @@ export const homePage = {
     primaryHref: "/contact#formulier",
     secondaryCta: "Hoe werkt het",
     secondaryHref: "/het-spel",
-    image: "/images/hero-bedrijfsuitje.jpg",
+    image: "/images/hero-bedrijfsuitje-v5.jpg",
     imageAlt: "Bedrijfsuitje Amsterdam, teams op sloepen aan de kade voor de start van het Sloepenspel",
   },
   marquee: {

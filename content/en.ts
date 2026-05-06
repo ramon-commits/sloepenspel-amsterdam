@@ -14,7 +14,7 @@ export const enHomePage = {
     primaryHref: "/contact#formulier",
     secondaryCta: "How it works",
     secondaryHref: "/het-spel",
-    image: "/images/hero-bedrijfsuitje.jpg",
+    image: "/images/hero-bedrijfsuitje-v5.jpg",
     imageAlt:
       "Canal boat rally Amsterdam, teams on boats at the dock for the start of the Sloepenspel",
   },
