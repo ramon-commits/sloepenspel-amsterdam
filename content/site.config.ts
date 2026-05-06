@@ -46,6 +46,7 @@ export const siteConfig = {
     ],
     legal: [
       { label: "Privacy", href: "/privacy" },
+      { label: "Voorwaarden", href: "/algemene-voorwaarden" },
       { label: "Contact", href: "/contact" },
     ],
   },

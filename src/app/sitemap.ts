@@ -18,6 +18,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/restaurants", priority: 0.7, changeFrequency: "monthly" as const },
     { path: "/en", priority: 0.6, changeFrequency: "monthly" as const },
     { path: "/privacy", priority: 0.3, changeFrequency: "yearly" as const },
+    { path: "/algemene-voorwaarden", priority: 0.3, changeFrequency: "yearly" as const },
     // SEO landings
     { path: "/teambuilding-amsterdam", priority: 0.85, changeFrequency: "monthly" as const },
     { path: "/personeelsuitje-amsterdam", priority: 0.85, changeFrequency: "monthly" as const },

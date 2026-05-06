@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Fraunces, DM_Sans } from "next/font/google";
-import { Analytics } from "@vercel/analytics/next";
+import { ConsentAnalytics } from "@/components/ConsentAnalytics";
+import { CookieBanner } from "@/components/CookieBanner";
 import { config } from "@fortawesome/fontawesome-svg-core";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 config.autoAddCss = false;
@@ -126,7 +127,8 @@ export default function RootLayout({
         />
         {children}
         <MobileCtaBar />
-        <Analytics />
+        <CookieBanner />
+        <ConsentAnalytics />
       </body>
     </html>
   );
