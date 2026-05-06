@@ -4,10 +4,10 @@
       "id": "1",
       "name": "Sanne de Wit",
       "role": "HR Manager",
-      "company": "Bynder",
+      "company": "PMI",
       "initials": "SW",
       "rating": 5,
-      "quote": "Onze hele afdeling, 140 mensen, was binnen tien minuten verkocht. Niemand stond op zijn telefoon, niemand wilde naar huis."
+      "quote": "Binnen tien minuten zat iedereen volledig in het spel. Zelfs collega’s die normaal rustig blijven, waren fanatiek aan het meedoen."
     },
     {
       "id": "2",
@@ -16,7 +16,7 @@
       "company": "Mollie",
       "initials": "MJ",
       "rating": 5,
-      "quote": "Wij doen elk jaar een teamuitje en het wordt nooit écht gespreksstof. Dit nu wel, collega's halen er nog steeds anekdotes uit op."
+      "quote": "Je merkt meteen dat hier echt over de ervaring is nagedacht. Collega’s hadden het er de week erna nog steeds over op kantoor."
     },
     {
       "id": "3",
@@ -25,7 +25,7 @@
       "company": "Studio Brouwer",
       "initials": "LB",
       "rating": 5,
-      "quote": "Wat ik vooral fijn vond: één aanspreekpunt, duidelijke prijs, en de ervaring was gewoon goed gemaakt."
+      "quote": "Alles liep soepel, communicatie was duidelijk en het voelde gewoon goed geregeld. Dat gaf veel rust voor onze groep."
     },
     {
       "id": "4",
@@ -34,7 +34,7 @@
       "company": "WeTransfer",
       "initials": "TW",
       "rating": 5,
-      "quote": "We dachten dat 250 mensen op het water onhandelbaar werd. Dat was het niet. Strakke organisatie, nul gedoe."
+      "quote": "Met zo’n grote groep verwacht je chaos, maar de organisatie hield overal overzicht op. Iedereen heeft echt genoten."
     }
   ],
   "logos": [
