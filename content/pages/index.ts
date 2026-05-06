@@ -13,7 +13,7 @@ export const homePage = {
     imageAlt: "Bedrijfsuitje Amsterdam, teams op sloepen aan de kade voor de start van het Sloepenspel",
   },
   marquee: {
-    eyebrow: "Vertrouwd door bedrijven in heel Amsterdam",
+    eyebrow: "Bedrijven die al met ons het water op gingen",
   },
   positiveReasons: {
     eyebrow: "Waarom teams kiezen",
