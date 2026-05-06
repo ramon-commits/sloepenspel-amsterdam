@@ -39,3 +39,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# local lighthouse audit output
+.lighthouse/
+
+# Netlify build cache
+.netlify/

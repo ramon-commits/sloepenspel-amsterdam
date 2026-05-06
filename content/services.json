@@ -1,0 +1,224 @@
+{
+  "positiveReasons": [
+    {
+      "id": "01",
+      "title": "Één keuze die werkt",
+      "body": "Geen eindeloos scrollen door honderden opties. Het Sloepenspel is één concept, volledig uitgedacht, en het werkt voor elke groep."
+    },
+    {
+      "id": "02",
+      "title": "Leuk voor iedereen",
+      "body": "Niet te corporate, niet te gek. Jullie team bepaalt zelf het tempo. Fanatiek racen of relaxt varen met een rosé, allebei kan."
+    },
+    {
+      "id": "03",
+      "title": "Eén prijs, alles geregeld",
+      "body": "€59,50 per persoon, inclusief sloep, spel, begeleiding, hapjes en drankjes aan boord. Geen losse kosten, geen gedoe achteraf."
+    }
+  ],
+  "howItWorks": [
+    {
+      "step": "01",
+      "time": "00:00 – 00:15",
+      "title": "Welkom op de kade",
+      "body": "Onze cast ontvangt jullie met een korte voorstelling die de energie erin brengt. Geen saaie briefing, meteen sfeer."
+    },
+    {
+      "step": "02",
+      "time": "00:15 – 00:30",
+      "title": "Aan boord",
+      "body": "Elk team stapt in een eigen sloep met een iPad vol spelopdrachten. Iedereen krijgt een rol: kapitein, navigator, spelverdeler."
+    },
+    {
+      "step": "03",
+      "time": "00:30 – 03:00",
+      "title": "Op het water",
+      "body": "Twee en een half uur varen door de grachten, verhalen ontdekken, opdrachten uitvoeren en verrassende ontmoetingen onderweg. 600 verhalen verstopt in de stad."
+    },
+    {
+      "step": "04",
+      "time": "03:00 – 03:30",
+      "title": "Samen afsluiten",
+      "body": "Iedereen komt samen op de eindlocatie. Ranking, prijzen, een hapje en een drankje. En wie wil kan doorschuiven naar diner."
+    }
+  ],
+  "differentiators": [
+    {
+      "icon": "boat",
+      "title": "Jullie varen zelf",
+      "body": "Iedere groep krijgt een eigen sloep met iPad. GPS stuurt jullie naar hotspots door de stad, challenges activeren automatisch. Jullie bepalen de route."
+    },
+    {
+      "icon": "masks-theater",
+      "title": "600 verhalen, live acteurs",
+      "body": "Bij elke hotspot een verhaal van Amsterdamse VIP-gidsen. Onderweg verschijnen onze locatie-acteurs om het tot leven te brengen."
+    },
+    {
+      "icon": "people-group",
+      "title": "Competitief en speels",
+      "body": "Live scorebord, teamchat, sabotage-gadgets en minigames. Van foto-challenges tot augmented reality. Het is een spel, geen rondvaart."
+    }
+  ],
+  "stats": [
+    {
+      "value": "600+",
+      "label": "Verhalen verstopt in de stad"
+    },
+    {
+      "value": "30 – 500+",
+      "label": "Personen per uitje"
+    },
+    {
+      "value": "€59,50",
+      "label": "p.p., alles inbegrepen"
+    },
+    {
+      "value": "6",
+      "label": "Vaarlocaties in Amsterdam"
+    }
+  ],
+  "locations": [
+    {
+      "id": "center",
+      "slug": "center",
+      "name": "Locatie Centrum",
+      "address": "Nassaukade 351",
+      "area": "Centrum-West",
+      "maxGroup": 200,
+      "description": "Midden in het centrum, direct aan de Singelgracht. De perfecte start voor teams die na afloop het centrum in willen.",
+      "lat": 52.3673,
+      "lng": 4.8770
+    },
+    {
+      "id": "weesper",
+      "slug": "weesper",
+      "name": "Locatie Weesper",
+      "address": "Schollenbrugstraat 1",
+      "area": "Oost",
+      "maxGroup": 200,
+      "description": "Aan de Weespertrekvaart, rustig vertrekpunt richting Amstel en Oost. Veel ruimte voor grote groepen.",
+      "lat": 52.3489,
+      "lng": 4.9137
+    },
+    {
+      "id": "east",
+      "slug": "east",
+      "name": "Locatie Oost",
+      "address": "Mauritskade 65",
+      "area": "Oost",
+      "maxGroup": 60,
+      "description": "Bij Oosterpark, kleinschalig en intiem. Geschikt voor groepen tot 60 personen.",
+      "lat": 52.3640,
+      "lng": 4.9230
+    },
+    {
+      "id": "amstel",
+      "slug": "amstel",
+      "name": "Locatie Amstel",
+      "address": "Mauritskade 1e",
+      "area": "Oost",
+      "maxGroup": 200,
+      "description": "Pal aan de Amstel, ideaal voor grote vloten en groepen vanaf 60.",
+      "lat": 52.3600,
+      "lng": 4.9074
+    },
+    {
+      "id": "south",
+      "slug": "south",
+      "name": "Locatie Zuid",
+      "address": "Stadionkade 73b",
+      "area": "Zuid",
+      "maxGroup": 200,
+      "description": "Aan het Olympisch Stadion, geschikt voor grote bedrijfsdagen. Strand Zuid om de hoek.",
+      "lat": 52.3441,
+      "lng": 4.8677
+    },
+    {
+      "id": "pijp",
+      "slug": "pijp",
+      "name": "Locatie De Pijp",
+      "address": "Jozef Israëlskade",
+      "area": "Zuid",
+      "maxGroup": 30,
+      "description": "Midden in De Pijp, compact en gezellig. Geschikt voor groepen tot 30 personen.",
+      "lat": 52.3488,
+      "lng": 4.8922
+    }
+  ],
+  "groupSizes": [
+    {
+      "id": "xs",
+      "label": "12–30 personen",
+      "shortLabel": "12–30",
+      "max": 30
+    },
+    {
+      "id": "s",
+      "label": "30–60 personen",
+      "shortLabel": "30–60",
+      "max": 60
+    },
+    {
+      "id": "m",
+      "label": "60–100 personen",
+      "shortLabel": "60–100",
+      "max": 100
+    },
+    {
+      "id": "l",
+      "label": "100+ personen",
+      "shortLabel": "100+",
+      "max": 200
+    }
+  ],
+  "restaurantsByLocation": {
+    "center": [
+      "cafe-restaurant-amsterdam",
+      "heemelrijck",
+      "waterkant"
+    ],
+    "weesper": [
+      "cafe-weesper",
+      "baut-oost",
+      "bar-botanique"
+    ],
+    "east": [
+      "kop-van-oost",
+      "dauphine"
+    ],
+    "amstel": [
+      "amstel-boathouse",
+      "amstelhaven",
+      "the-travelers"
+    ],
+    "south": [
+      "strand-zuid",
+      "de-karavaan"
+    ],
+    "pijp": [
+      "kanarieclub",
+      "secret-garden",
+      "vergulden-eenhoorn",
+      "hesp"
+    ]
+  },
+  "pricing": {
+    "main": {
+      "price": "€59,50",
+      "unit": "per persoon",
+      "subline": "Eén prijs. Alles erin.",
+      "includes": [
+        "Eigen sloep met vaarbegeleiding",
+        "iPad met spelopdrachten per boot",
+        "Locatie-acteurs op de route",
+        "Welkom door onze cast",
+        "Foto's van de middag",
+        "Prijsuitreiking en afsluiting"
+      ],
+      "excludes": [
+        "Lunch of diner (te boeken bij onze restaurantpartners)",
+        "Vervoer naar de vaarlocatie"
+      ]
+    }
+  }
+}

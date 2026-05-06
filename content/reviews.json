@@ -1,0 +1,55 @@
+{
+  "reviews": [
+    {
+      "id": "1",
+      "name": "Sanne de Wit",
+      "role": "HR Manager",
+      "company": "Bynder",
+      "initials": "SW",
+      "rating": 5,
+      "quote": "Onze hele afdeling, 140 mensen, was binnen tien minuten verkocht. Niemand stond op zijn telefoon, niemand wilde naar huis."
+    },
+    {
+      "id": "2",
+      "name": "Mark Janssen",
+      "role": "Office Manager",
+      "company": "Mollie",
+      "initials": "MJ",
+      "rating": 5,
+      "quote": "Wij doen elk jaar een teamuitje en het wordt nooit écht gespreksstof. Dit nu wel, collega's halen er nog steeds anekdotes uit op."
+    },
+    {
+      "id": "3",
+      "name": "Lara Brouwer",
+      "role": "Founder",
+      "company": "Studio Brouwer",
+      "initials": "LB",
+      "rating": 5,
+      "quote": "Wat ik vooral fijn vond: één aanspreekpunt, duidelijke prijs, en de ervaring was gewoon goed gemaakt."
+    },
+    {
+      "id": "4",
+      "name": "Tom Weenink",
+      "role": "People Lead",
+      "company": "WeTransfer",
+      "initials": "TW",
+      "rating": 5,
+      "quote": "We dachten dat 250 mensen op het water onhandelbaar werd. Dat was het niet. Strakke organisatie, nul gedoe."
+    }
+  ],
+  "logos": [
+    { "name": "Gemeente Amsterdam" },
+    { "name": "Booking.com" },
+    { "name": "Waternet" },
+    { "name": "ECI" },
+    { "name": "Club Car" },
+    { "name": "Nike" },
+    { "name": "Bouygues" },
+    { "name": "McDonald's" },
+    { "name": "Heineken" },
+    { "name": "PMI" },
+    { "name": "Sanofi" },
+    { "name": "Accor" },
+    { "name": "Amsterdam UMC" }
+  ]
+}

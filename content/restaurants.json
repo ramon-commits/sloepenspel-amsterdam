@@ -1,0 +1,410 @@
+[
+  {
+    "naam": "Amstel Boathouse",
+    "slug": "amstel-boathouse",
+    "website": "https://amstelboathouse.nl",
+    "keuken": "Internationaal",
+    "sfeer": "Drijvend restaurant aan de Amstel",
+    "max_groep": 200,
+    "adres": "Amsteldijk 223, Amsterdam",
+    "prijsklasse": "€€€",
+    "groepsruimte": true,
+    "bijzonder_detail": "Drijvende evenementenlocatie aan de Amstel met meerdere zalen en steiger.",
+    "dichtstbijzijnde_sloepenspel_locatie": "amstel",
+    "hero": "/images/restaurants/amstel-boathouse/hero.jpg",
+    "gallery": [
+      "/images/restaurants/amstel-boathouse/hero.jpg",
+      "/images/sloep-met-eten.jpg",
+      "/images/sloep-gracht-zonnig.png"
+    ],
+    "story": [
+      "Amstel Boathouse zit waar je het zou hopen: pal aan de rivier waar de stad om draait. Een drijvende evenementenlocatie die met de seizoenen mee beweegt, letterlijk. In de zomer schuiven de glazen wanden open en wordt het terras één geheel met de Amstel; in de winter is het een warme, lichte ruimte die het uitzicht op het water nooit kwijtraakt.",
+      "Wat het bijzonder maakt voor groepen is de schaal: meerdere zalen op één steiger, plus een eigen aanlegplaats. Jullie sloepen kunnen direct hier aanmeren na het Sloepenspel. Geen wandeling van de kade naar tafel, geen logistiek gepuzzel. Stap af, loop door, ga zitten.",
+      "Het keukenteam werkt internationaal en seizoensgebonden. Voor groepen zijn er drie- of vier-gangen menu's met ruimte voor dieetwensen, en de wijnkaart is afgestemd op zowel zomerdagen als rustige najaarsdiners."
+    ]
+  },
+  {
+    "naam": "Kanarieclub Amsterdam",
+    "slug": "kanarieclub",
+    "website": "https://kanarieclub.nl",
+    "keuken": "Shared dining",
+    "sfeer": "Hippe tramremise met zonnig terras",
+    "max_groep": 700,
+    "adres": "Tweede Hugo de Grootstraat 1, Amsterdam",
+    "prijsklasse": "€€",
+    "groepsruimte": true,
+    "bijzonder_detail": "Gevestigd in historische tramremise met zwembad-poolbar op de vide.",
+    "dichtstbijzijnde_sloepenspel_locatie": "pijp",
+    "hero": "/images/restaurants/kanarieclub/hero.jpg",
+    "gallery": [
+      "/images/restaurants/kanarieclub/hero.jpg",
+      "/images/restaurants/kanarieclub/p2.jpg",
+      "/images/sloep-met-eten.jpg"
+    ],
+    "story": [
+      "De Kanarieclub speelt zich af in een gerenoveerde tramremise uit het begin van de twintigste eeuw. De originele staalconstructie is intact gehouden, met daarboven een speelse vide waar je een blauwe zwembadbar vindt. Het is het soort plek dat je niet verzint: industrieel, ruim, en toch warm.",
+      "Voor grote groepen is het een van de weinige restaurants in Amsterdam die zonder moeite tot 700 mensen ontvangt voor een borrel of staande receptie. Voor zittende diners passen er nog steeds 200 mensen comfortabel. De akoestiek is verrassend goed voor zo'n grote ruimte, dus je hoeft niet over tafels heen te schreeuwen.",
+      "De keuken is shared-style: gerechten in het midden van tafel, iedereen pakt wat hij wil. Mediterraans van inslag, met seizoensingrediënten en een goede vegetarische keuze. Voor wie vooral wil borrelen werken de bittergarnituren ook prima."
+    ]
+  },
+  {
+    "naam": "De Karavaan Amsterdam",
+    "slug": "de-karavaan",
+    "website": "https://www.karavaanamsterdam.nl",
+    "keuken": "Mediterraans",
+    "sfeer": "Levendige all-day spot met zonneterras",
+    "max_groep": 80,
+    "adres": "Kwakersplein 2, Amsterdam",
+    "prijsklasse": "€€",
+    "groepsruimte": true,
+    "bijzonder_detail": "Een van de zonnigste terrassen van Amsterdam-West, open van ontbijt tot late drinks.",
+    "dichtstbijzijnde_sloepenspel_locatie": "south",
+    "hero": "/images/restaurants/de-karavaan/hero.jpg",
+    "gallery": [
+      "/images/restaurants/de-karavaan/hero.jpg",
+      "/images/restaurants/de-karavaan/p2.jpg",
+      "/images/sloep-met-eten.jpg"
+    ],
+    "story": [
+      "Het Kwakersplein in Amsterdam-West is een ontdekking voor wie er nog nooit was: een breed plein met een paar terrassen die de hele middag in de zon liggen. De Karavaan zit precies op de hoek waar de zon het langst blijft hangen, en heeft daar slim gebruik van gemaakt met een uitgebreid terras dat opent zodra het buiten 12 graden is.",
+      "Het is een all-day spot, wat betekent dat je er voor ontbijt, lunch, borrel en diner terecht kunt. Voor jullie groep zijn de avonduren het meest interessant: het terras vult zich rond zes uur met buurtbewoners, de keuken loopt door tot tien uur, en de bar daarna nog een paar uur door.",
+      "De keuken is mediterraan met Noord-Afrikaanse invloeden. Mezze, gegrilde vis, lamsvlees met ras el hanout, dat soort werk. Goede vegetarische opties en een uitgesproken wijnkaart met natuurwijnen en zuid-Europese huiswijnen die niet duur zijn."
+    ]
+  },
+  {
+    "naam": "Secret Garden Amsterdam",
+    "slug": "secret-garden",
+    "website": "https://www.secretgardenamsterdam.com",
+    "keuken": "Nikkei",
+    "sfeer": "Exotische groene oase met kunst",
+    "max_groep": 60,
+    "adres": "Reguliersdwarsstraat 38-40, Amsterdam",
+    "prijsklasse": "€€€€",
+    "groepsruimte": true,
+    "bijzonder_detail": "Nikkei-keuken (Japans-Peruviaans) midden in een verborgen botanische tuin.",
+    "dichtstbijzijnde_sloepenspel_locatie": "pijp",
+    "hero": "/images/restaurants/secret-garden/hero.png",
+    "gallery": [
+      "/images/restaurants/secret-garden/hero.png",
+      "/images/sloep-met-eten.jpg",
+      "/images/sloep-gracht-zonnig.png"
+    ],
+    "story": [
+      "De entree van Secret Garden is letterlijk een kleine, niet opvallende deur in de Reguliersdwarsstraat. Achter die deur opent een ruimte die je niet zag aankomen: een groene oase met hoge planten, kunst aan de muren en een open binnentuin waar de zon door de glazen kap valt.",
+      "De keuken is Nikkei, de fusie tussen Japans en Peruviaans die in Tokio en Lima al decennialang gevierd wordt. Ceviche met yuzu, sashimi met aji-amarillo, gegrilde tonijn met chimichurri. Voor groepen zijn er chef-tasting-menu's die afgestemd worden op het seizoen en op jullie wensen vooraf.",
+      "Het is een verfijnde plek, dus pas op met groepen die alleen maar bier willen drinken. Voor teams die een bijzonder afsluiter willen, eentje die collega's nog jaren later aanhalen, is dit een goede keuze. Maximaal 60 personen, zittend, met een eigen ruimte gereserveerd."
+    ]
+  },
+  {
+    "naam": "Kop van Oost Amsterdam",
+    "slug": "kop-van-oost",
+    "website": "https://dekopvanoost.com",
+    "keuken": "Franse brasserie",
+    "sfeer": "Sfeervolle waterkantbrasserie met terras",
+    "max_groep": 80,
+    "adres": "Zeeburgerpad 1, Amsterdam",
+    "prijsklasse": "€€€",
+    "groepsruimte": false,
+    "bijzonder_detail": "Vanaf mei 2026 verder onder nieuwe naam Tête, met klassiekers en uniek waterterras.",
+    "dichtstbijzijnde_sloepenspel_locatie": "east",
+    "hero": "/images/restaurants/kop-van-oost/hero.jpg",
+    "gallery": [
+      "/images/restaurants/kop-van-oost/hero.jpg",
+      "/images/sloep-met-eten.jpg",
+      "/images/sloep-gracht-zonnig.png"
+    ],
+    "story": [
+      "Het Zeeburgerpad is een van de meest atmosferische steigers van Oost. Een rij oude pakhuizen, deels herbestemd tot werkplaatsen en restaurants, met aan het einde Kop van Oost. De brasserie zit op de letterlijke kop, met uitzicht op zowel het IJ als het Lozingskanaal.",
+      "Vanaf mei 2026 gaat de zaak verder onder de naam Tête, met dezelfde formule maar verfijnd. Klassieke Franse brasseriegerechten: steak frites, moules marinière, tarte tatin. Een wijnkaart die niet pretendeert duurder te zijn dan nodig.",
+      "Voor groepen tot 80 personen is het terras in de zomer onverslaanbaar; de zon blijft er hangen tot ver in de avond. Geen aparte groepsruimte, maar de zaal kan op rustige avonden volledig afgehuurd worden."
+    ]
+  },
+  {
+    "naam": "Cafe Restaurant Amsterdam",
+    "slug": "cafe-restaurant-amsterdam",
+    "website": "https://cradam.nl",
+    "keuken": "Frans-Internationaal",
+    "sfeer": "Industrieel monument met hoge plafonds",
+    "max_groep": 100,
+    "adres": "Watertorenplein 6, Amsterdam",
+    "prijsklasse": "€€€",
+    "groepsruimte": false,
+    "bijzonder_detail": "Gevestigd in een 19e-eeuws machinepompgebouw met dieselmotor als blikvanger.",
+    "dichtstbijzijnde_sloepenspel_locatie": "center",
+    "hero": "/images/restaurants/cafe-restaurant-amsterdam/hero.jpg",
+    "gallery": [
+      "/images/restaurants/cafe-restaurant-amsterdam/hero.jpg",
+      "/images/restaurants/cafe-restaurant-amsterdam/p2.jpg",
+      "/images/restaurants/cafe-restaurant-amsterdam/p3.jpg"
+    ],
+    "story": [
+      "Cafe Restaurant Amsterdam zit in een rijksmonument: een machinepompgebouw uit de negentiende eeuw, gebouwd om water uit het Watertorenplein-gebied weg te pompen. Het is een grote, hoge, industriële ruimte met de oude dieselmotor nog op zijn plek midden in de eetzaal.",
+      "De ruimte werkt vooral voor groepen die wat meer ademruimte willen. De plafonds zijn vier à vijf meter hoog, en er staan grote, vrijstaande tafels die je kunt aanschuiven. Het zonneterras buiten kijkt uit op de fontein en de Amsterdamse Watertoren. Op zomeravonden is dat een van de mooiste plekken om af te sluiten.",
+      "De keuken is Frans-internationaal, met een seizoenskaart die elke paar weken kantelt. Steak tartaar, Hollandse vis, en goede vegetarische opties. Voor groepen tot 100 personen werken ze met aanbod-menu's waar je vooraf uit kiest, zodat het serveren snel en strak gaat."
+    ]
+  },
+  {
+    "naam": "Vergulden Eenhoorn Amsterdam",
+    "slug": "vergulden-eenhoorn",
+    "website": "https://verguldeneenhoorn.nl",
+    "keuken": "Modern Nederlands",
+    "sfeer": "Stadsboerderij met groene tuin",
+    "max_groep": 100,
+    "adres": "Ringdijk 58, Amsterdam",
+    "prijsklasse": "€€€",
+    "groepsruimte": true,
+    "bijzonder_detail": "Authentieke stadsboerderij uit 1702 met Hooiberg, picknicktuin en hotelkamers.",
+    "dichtstbijzijnde_sloepenspel_locatie": "pijp",
+    "hero": "/images/restaurants/vergulden-eenhoorn/hero.jpg",
+    "gallery": [
+      "/images/restaurants/vergulden-eenhoorn/hero.jpg",
+      "/images/restaurants/vergulden-eenhoorn/p2.jpg",
+      "/images/restaurants/vergulden-eenhoorn/p3.jpg"
+    ],
+    "story": [
+      "De Vergulden Eenhoorn is een stadsboerderij uit 1702, en dat zie je. De gebouwen zijn authentiek, met witte muren en een rieten dak op de Hooiberg. De tuin is breed en groen, met picknicktafels en op zomerdagen een open vuurplek.",
+      "Wat het bijzonder maakt is dat het een complete locatie is: hoofdrestaurant voor groepsdiners tot 100 personen, een aparte ruimte in de Hooiberg voor 40 personen, en hotelkamers als jullie team uit andere steden komt en wil overnachten. Veel teams boeken hier een overnachting na een lange bedrijfsdag.",
+      "De keuken is modern Nederlands met regionale producten. Vis uit het IJsselmeer, vlees van de boerderij waar de eigenaars mee samenwerken, en groenten uit eigen moestuin in het seizoen. De kaart is overzichtelijk, niet pretentieus, en goed."
+    ]
+  },
+  {
+    "naam": "Heemelrijck Amsterdam",
+    "slug": "heemelrijck",
+    "website": "https://www.heemelrijck.nl",
+    "keuken": "Hollands traditioneel",
+    "sfeer": "Klassiek Amsterdams met Delfts blauw",
+    "max_groep": 300,
+    "adres": "Lijnbaansgracht 246, Amsterdam",
+    "prijsklasse": "€€",
+    "groepsruimte": true,
+    "bijzonder_detail": "Echte Hollandse familierecepten sinds 1949 zoals snert, stamppot en suddervlees.",
+    "dichtstbijzijnde_sloepenspel_locatie": "center",
+    "hero": "/images/restaurants/heemelrijck/hero.avif",
+    "gallery": [
+      "/images/restaurants/heemelrijck/hero.avif",
+      "/images/restaurants/heemelrijck/p2.avif",
+      "/images/sloep-met-eten.jpg"
+    ],
+    "story": [
+      "Heemelrijck zit pal aan de Lijnbaansgracht, vlakbij Leidseplein. Sinds 1949 hetzelfde concept: stevige, traditionele Hollandse keuken in een interieur met Delfts blauw, donker hout en eindeloos veel kaarslicht. Het is geen ironische kijk op Hollandse keuken, het is gewoon Hollandse keuken.",
+      "Voor groepen is het een uitstekende plek om de avond af te sluiten met iets warms. Snert, stamppot, suddervlees, varkenshaas met jus. Niets is licht, alles is voedend, en de prijs blijft binnen redelijk. De zaak draait al drie generaties onder dezelfde familie.",
+      "Tot 300 personen passen er in de hoofdruimte voor staande borrels. Voor zittend diner is 150 personen het comfortabele maximum. Een aparte zaal achterin is beschikbaar voor groepen die een eigen ruimte willen."
+    ]
+  },
+  {
+    "naam": "Waterkant Amsterdam",
+    "slug": "waterkant",
+    "website": "https://www.waterkantamsterdam.nl",
+    "keuken": "Surinaams",
+    "sfeer": "Tropische oase aan de Singelgracht",
+    "max_groep": 150,
+    "adres": "Marnixstraat 246, Amsterdam",
+    "prijsklasse": "€€",
+    "groepsruimte": false,
+    "bijzonder_detail": "Tropische strandvibes met Surinaamse roti en cocktails onder de Marnixbrug.",
+    "dichtstbijzijnde_sloepenspel_locatie": "center",
+    "hero": "/images/restaurants/waterkant/hero.jpg",
+    "gallery": [
+      "/images/restaurants/waterkant/hero.jpg",
+      "/images/restaurants/waterkant/p2.jpg",
+      "/images/restaurants/waterkant/p4.jpg"
+    ],
+    "story": [
+      "Waterkant zit onder de Marnixbrug, met een breed zonnig terras direct aan de Singelgracht. Het is in feite een buitenrestaurant: bijna alle zitplekken zijn buiten, met palmen, fairylights en een soundtrack die meer naar Caribbean klinkt dan naar Amsterdam.",
+      "De keuken is Surinaams, voor het grootste deel: roti met kip of vegetarisch, bara, pom, en cocktails op tropische basis. Voor groepen werkt het format goed omdat alles snel bereid wordt en iedereen zelf zijn portie kan kiezen. Geen vaste menu's, gewoon vrij bestellen.",
+      "De groepsgrootte zit op 150 personen voor een staande borrel, ongeveer 80 voor zittend. Geen apart zaaltje, maar in de zomeravonden is dat geen probleem omdat het terras zo groot is dat je je eigen hoek kunt claimen."
+    ]
+  },
+  {
+    "naam": "Bar Botanique Amsterdam",
+    "slug": "bar-botanique",
+    "website": "https://www.barbotanique.nl",
+    "keuken": "Mediterraans",
+    "sfeer": "Groene oase met hoge ramen",
+    "max_groep": 80,
+    "adres": "Eerste van Swindenstraat 581, Amsterdam",
+    "prijsklasse": "€€",
+    "groepsruimte": true,
+    "bijzonder_detail": "Ooit gymzaal van basisschool, nu jungle-achtige bar met privévide voor groepen.",
+    "dichtstbijzijnde_sloepenspel_locatie": "weesper",
+    "hero": "/images/restaurants/bar-botanique/hero.jpg",
+    "gallery": [
+      "/images/restaurants/bar-botanique/hero.jpg",
+      "/images/restaurants/bar-botanique/p2.jpg",
+      "/images/restaurants/bar-botanique/p3.jpg"
+    ],
+    "story": [
+      "Bar Botanique zit in een voormalige basisschool, op de plek waar vroeger de gymzaal was. De ruimte is opvallend hoog, met enorme ramen en een vide die als privéruimte voor groepen kan worden gereserveerd. Overal in de zaak hangen tropische planten, alsof iemand de gymzaal heeft achtergelaten en de jungle heeft het overgenomen.",
+      "Het publiek is overwegend creatief en agency-achtig: ontwerpbureaus, agencies, mediabedrijven uit Oost. De ruimte werkt voor teams die iets willen tussen formele setting en regelrechte borrel.",
+      "De keuken is mediterraan, sharing-stijl. Mezze, vis, gegrilde groenten met za'atar. Op de bar staan altijd verse cocktails en natuurwijnen. Tot 80 personen op de hoofdverdieping, plus de privévide voor 30 mensen."
+    ]
+  },
+  {
+    "naam": "Baut Oost Amsterdam",
+    "slug": "baut-oost",
+    "website": "https://www.baut.amsterdam",
+    "keuken": "Modern Europees",
+    "sfeer": "Eclectisch met centrale bar",
+    "max_groep": 150,
+    "adres": "Wibautstraat 125, Amsterdam",
+    "prijsklasse": "€€€",
+    "groepsruimte": true,
+    "bijzonder_detail": "Begon als pop-up in 2012 met een 10 in het Parool van Johannes van Dam.",
+    "dichtstbijzijnde_sloepenspel_locatie": "weesper",
+    "hero": "/images/restaurants/baut-oost/hero.jpg",
+    "gallery": [
+      "/images/restaurants/baut-oost/hero.jpg",
+      "/images/restaurants/baut-oost/p2.jpg",
+      "/images/restaurants/baut-oost/p3.jpg"
+    ],
+    "story": [
+      "Baut begon in 2012 als pop-up in een leegstaand kantoorgebouw aan de Wibautstraat, met een keukenteam dat avontuurlijker kookte dan de meeste vaste restaurants. Drie maanden na opening kreeg de zaak een 10 in het Parool van Johannes van Dam, en sindsdien is het permanent gebleven, ook al ademt het nog altijd die pop-up-energie.",
+      "Het interieur is eclectisch: vintage meubels, neon-kunstwerken, een centrale bar waar de chefs af en toe zelf koken voor hun stoel. Voor groepen werkt het format goed omdat de zaal flexibel is in te delen, met een aparte ruimte aan de achterzijde voor 50 personen.",
+      "De keuken is modern Europees met onverwachte combinaties. Een wisselende kaart elke twee weken, een uitgebreide bittergarnituur-borrel-aanpak, en een wijnkaart met focus op kleine wijnboeren uit Europa."
+    ]
+  },
+  {
+    "naam": "Cafe Weesper Amsterdam",
+    "slug": "cafe-weesper",
+    "website": "https://www.weesperamsterdam.nl",
+    "keuken": "Bistro",
+    "sfeer": "Grand café aan de Amstel",
+    "max_groep": 110,
+    "adres": "Weesperzijde 147, Amsterdam",
+    "prijsklasse": "€€",
+    "groepsruimte": true,
+    "bijzonder_detail": "Voormalige wijnkelder als sfeervolle privéruimte met beamer voor 110 gasten.",
+    "dichtstbijzijnde_sloepenspel_locatie": "weesper",
+    "hero": "/images/restaurants/cafe-weesper/hero.jpg",
+    "gallery": [
+      "/images/restaurants/cafe-weesper/hero.jpg",
+      "/images/restaurants/cafe-weesper/p2.jpg",
+      "/images/restaurants/cafe-weesper/p3.jpg"
+    ],
+    "story": [
+      "Cafe Weesper is een grand café in de meest klassieke betekenis: hoge plafonds, donkere houten tafels, een lange bar met flessen op de plank. Het zit aan de Weesperzijde, met uitzicht op de Amstel, en heeft een breed terras dat in de zomer langs het water zit.",
+      "Wat het bijzonder maakt voor groepen is de wijnkelder onder het pand, omgebouwd tot privéruimte. Tot 110 mensen passen er in voor een staande borrel of zittend met buffet. De ruimte heeft een eigen bar, beamer en geluid, dus presentaties of speeches zijn geen probleem.",
+      "De keuken is bistro: salades, vis, vlees, vegetarische pasta. Niet experimenteel, gewoon goed gemaakt. Een prijs-kwaliteitverhouding die voor middelgrote groepen vaak het meest werkt."
+    ]
+  },
+  {
+    "naam": "Hesp Amsterdam",
+    "slug": "hesp",
+    "website": "https://www.caferestauranthesp.nl",
+    "keuken": "Bruin café",
+    "sfeer": "Authentiek 19e-eeuws met Amstelterras",
+    "max_groep": 80,
+    "adres": "Weesperzijde 130-131, Amsterdam",
+    "prijsklasse": "€€",
+    "groepsruimte": false,
+    "bijzonder_detail": "Bestaat al sinds 1890 en heeft 20 bieren op de tap aan de Amstel.",
+    "dichtstbijzijnde_sloepenspel_locatie": "pijp",
+    "hero": "/images/restaurants/hesp/hero.jpg",
+    "gallery": [
+      "/images/restaurants/hesp/hero.jpg",
+      "/images/sloep-met-eten.jpg",
+      "/images/sloep-gracht-zonnig.png"
+    ],
+    "story": [
+      "Hesp bestaat sinds 1890 en heeft sindsdien zijn karakter behouden: een bruin café met donker hout, koperen lampen, en een lange bar waar nog steeds dezelfde tradities gelden als 130 jaar geleden. De plek is geliefd bij Amsterdammers die geen zin hebben in iets nieuws.",
+      "Twintig bieren op de tap, allemaal Belgisch en Nederlands, met een rotatie elke maand. Voor wie van trappisten houdt, is dit een hemel. Voor wie alleen pils drinkt, is het ook prima. De keuken doet eenvoudige bistro-gerechten, niets sterren-waardigs, alles goed gemaakt.",
+      "Geen aparte groepsruimte, maar de hoofdzaak is groot genoeg dat je met 80 mensen comfortabel kunt zitten. Het terras op de Weesperzijde is de magneet in de zomer: direct aan de Amstel, met zon van de namiddag tot zonsondergang."
+    ]
+  },
+  {
+    "naam": "Dauphine Amsterdam",
+    "slug": "dauphine",
+    "website": "https://www.caferestaurantdauphine.nl",
+    "keuken": "Franse brasserie",
+    "sfeer": "Ruime art-deco brasserie met live muziek",
+    "max_groep": 240,
+    "adres": "Prins Bernhardplein 175, Amsterdam",
+    "prijsklasse": "€€€",
+    "groepsruimte": true,
+    "bijzonder_detail": "Gevestigd in voormalige Renault-showroom met live Club Dauphine Band op vrijdag.",
+    "dichtstbijzijnde_sloepenspel_locatie": "east",
+    "hero": "/images/restaurants/dauphine/hero.jpg",
+    "gallery": [
+      "/images/restaurants/dauphine/hero.jpg",
+      "/images/restaurants/dauphine/p2.jpg",
+      "/images/restaurants/dauphine/p3.jpg"
+    ],
+    "story": [
+      "Dauphine zit in wat ooit de Renault-showroom van Amsterdam was, vlakbij Amstel-station. Het gebouw heeft die karakteristieke art-deco-architectuur met grote ramen, hoge plafonds en een mezzanine die nog altijd herinnert aan de tijd dat hier auto's stonden.",
+      "Op vrijdagavond speelt de Club Dauphine Band live in de zaal, een vaste traditie sinds 2010. Voor groepen die op een vrijdag plannen is dat onderdeel van de avond: eten tot tien, dan nog een uur met muziek erbij. Voor andere dagen is de zaal rustiger en meer brasserie-formeel.",
+      "De groepsgrootte gaat tot 240 personen voor een staande borrel, 160 voor zittend. Aparte zalen op de mezzanine voor 40 of 80 personen. Klassieke Franse brasseriegerechten met een Hollandse twist; de chef komt uit Lyon."
+    ]
+  },
+  {
+    "naam": "Amstelhaven Amsterdam",
+    "slug": "amstelhaven",
+    "website": "https://amstelhaven.nl",
+    "keuken": "Internationaal",
+    "sfeer": "Groot vlonderterras op het water",
+    "max_groep": 350,
+    "adres": "Mauritskade 1, Amsterdam",
+    "prijsklasse": "€€",
+    "groepsruimte": true,
+    "bijzonder_detail": "Grootste vlonderterras van Amsterdam waar je met je eigen bootje kunt aanmeren.",
+    "dichtstbijzijnde_sloepenspel_locatie": "amstel",
+    "hero": "/images/restaurants/amstelhaven/hero.jpg",
+    "gallery": [
+      "/images/restaurants/amstelhaven/hero.jpg",
+      "/images/sloep-met-eten.jpg",
+      "/images/sloep-gracht-zonnig.png"
+    ],
+    "story": [
+      "Amstelhaven is onze meest geboekte eindlocatie, en de reden is logistiek: het zit op exact de plek waar het Sloepenspel meestal eindigt, met een vlonderterras dat groot genoeg is voor een hele bedrijfsdag tegelijk. Jullie sloepen meren direct aan, jullie team stapt af, en zit binnen tien minuten aan tafel.",
+      "Het terras is het grootste op het water in Amsterdam, met houten vlonders die letterlijk over de Amstel hangen. In de zomer is dat onverslaanbaar: zon vanaf het middaguur tot zonsondergang, een briesje van het water, en een bar die zo dichtbij staat dat je rondes snel rond gaan.",
+      "De keuken is internationaal, niets exotisch, alles goed bereid. Borrelplanken, vis, salades, vlees, een goede vegetarische optie. Voor grote groepen werken ze met aanbod-menu's en een vaste serveerstrategie zodat 200 mensen tegelijk eten zonder vertraging."
+    ]
+  },
+  {
+    "naam": "The Travelers Amsterdam",
+    "slug": "the-travelers",
+    "website": "https://www.thetravelleramsterdam.com",
+    "keuken": "Wereldkeuken",
+    "sfeer": "Wereldse shared dining sfeer",
+    "max_groep": 200,
+    "adres": "Europaplein 2, Amsterdam",
+    "prijsklasse": "€€€",
+    "groepsruimte": true,
+    "bijzonder_detail": "Culinaire wereldreis met traditionele wereldgerechten in moderne kooktechnieken.",
+    "dichtstbijzijnde_sloepenspel_locatie": "amstel",
+    "hero": "/images/restaurants/the-travelers/hero.jpg",
+    "gallery": [
+      "/images/restaurants/the-travelers/hero.jpg",
+      "/images/restaurants/the-travelers/p2.jpg",
+      "/images/restaurants/the-travelers/p3.jpg"
+    ],
+    "story": [
+      "The Travelers is een culinaire wereldreis op één plek. Het keukenteam pakt traditionele gerechten van over de hele wereld en herinterpreteert ze met moderne technieken. Vandaag eet je een Marokkaans tagine met sous-vide-techniek, morgen een Vietnamese pho met geserveerd-aan-tafel-spektakel.",
+      "Het format werkt vooral voor teams die gewend zijn aan culinaire avontuur. De shared dining-aanpak betekent dat iedereen drie of vier gerechten proeft, en het maandelijks wisselende reisthema brengt elke keer iets nieuws. De ene maand is het Zuid-Amerika, de volgende Zuidoost-Azië.",
+      "Voor groepen tot 200 personen is er een aparte ruimte beschikbaar in het tegenovergelegen pand. Voor zittende groepsdiners is 60 personen het comfortabele maximum, voor staande borrels gaat het tot 200. De wijnkaart matcht het reisthema en wisselt mee."
+    ]
+  },
+  {
+    "naam": "Strand Zuid Amsterdam",
+    "slug": "strand-zuid",
+    "website": "https://strand-zuid.nl",
+    "keuken": "Mediterraans",
+    "sfeer": "Stadsstrand aan het water bij RAI",
+    "max_groep": 2000,
+    "adres": "Europaplein 22, Amsterdam",
+    "prijsklasse": "€€€",
+    "groepsruimte": true,
+    "bijzonder_detail": "Zomerstadsstrand bij Beatrixpark met 7 plug-and-play eventruimtes tot 2000 personen.",
+    "dichtstbijzijnde_sloepenspel_locatie": "south",
+    "hero": "/images/restaurants/strand-zuid/hero.webp",
+    "gallery": [
+      "/images/restaurants/strand-zuid/hero.webp",
+      "/images/restaurants/strand-zuid/p2.webp",
+      "/images/restaurants/strand-zuid/p3.webp"
+    ],
+    "story": [
+      "Strand Zuid is een stadsstrand pal naast het Beatrixpark en vlakbij de RAI. Een paar duizend vierkante meter zand, palmen, BBQ-stations, een houten loungeterras, en in het hoogseizoen een sfeer die meer aan Ibiza doet denken dan aan Amsterdam.",
+      "Voor grote bedrijfsdagen is het de meest schaalbare optie van Amsterdam: zeven plug-and-play eventruimtes die tot 2000 personen kunnen ontvangen. Of jullie nu een afdeling van 50 zijn die wil eten, of een hele bedrijfsdag van 800 mensen organiseren, hier past het in.",
+      "De keuken is mediterraan met BBQ-elementen, perfect voor zomerse groepen. Catering is gestandaardiseerd: ontbijt, lunch, borrel, en diner-pakketten die afgestemd zijn op aantallen. Voor de grootste groepen werken ze met meerdere food-stations zodat iedereen snel bediend wordt."
+    ]
+  }
+]
