@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { ToastProvider } from "./components/Toast";
 import { ConfirmProvider } from "./components/ConfirmDialog";
+import { UnsavedChangesProvider } from "./components/UnsavedChanges";
+import { AdminErrorBoundary } from "./components/AdminErrorBoundary";
 import "./admin.css";
 
 const inter = Inter({
@@ -33,7 +35,11 @@ export default function AdminLayout({
   return (
     <div className={`em-admin ${inter.variable}`}>
       <ToastProvider>
-        <ConfirmProvider>{children}</ConfirmProvider>
+        <ConfirmProvider>
+          <UnsavedChangesProvider>
+            <AdminErrorBoundary>{children}</AdminErrorBoundary>
+          </UnsavedChangesProvider>
+        </ConfirmProvider>
       </ToastProvider>
     </div>
   );

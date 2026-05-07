@@ -1,6 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
+import { useToast } from "./Toast";
+import { useConfirm } from "./ConfirmDialog";
 
 /**
  * Compact "recent changes" timeline backed by GitHub's commits API.
@@ -8,6 +10,16 @@ import { useEffect, useState } from "react";
  * HistoryView. Only shows commits prefixed with "admin:" — i.e. the ones
  * the admin tool itself made.
  */
+
+type RevertResponse =
+  | {
+      ok: true;
+      sha: string;
+      commitUrl: string;
+      filesReverted: string[];
+      skipped?: Array<{ path: string; reason: string }>;
+    }
+  | { ok: false; error: string; skipped?: Array<{ path: string; reason: string }> };
 
 export type AdminCommit = {
   sha: string;
@@ -51,6 +63,8 @@ type Props = {
   onSeeAll?: () => void;
   /** When false, includes non-admin commits too. Default true. */
   adminOnly?: boolean;
+  /** When true, each commit gets a "Terugdraaien" action. Default false. */
+  showRevert?: boolean;
 };
 
 export function RecentChanges({
@@ -58,8 +72,13 @@ export function RecentChanges({
   title,
   onSeeAll,
   adminOnly = true,
+  showRevert = false,
 }: Props) {
+  const toast = useToast();
+  const confirm = useConfirm();
   const [state, setState] = useState<FetchState>({ status: "loading" });
+  const [reverting, setReverting] = useState<string | null>(null);
+  const [reloadKey, setReloadKey] = useState(0);
 
   useEffect(() => {
     let cancelled = false;
@@ -91,7 +110,48 @@ export function RecentChanges({
     return () => {
       cancelled = true;
     };
-  }, [limit, adminOnly]);
+  }, [limit, adminOnly, reloadKey]);
+
+  const onRevert = useCallback(
+    async (commit: AdminCommit) => {
+      const ok = await confirm({
+        title: "Wijziging terugdraaien?",
+        description: `Hiermee wordt "${trimAdminPrefix(commit.message)}" teruggedraaid via een nieuwe commit. De inhoud van de aangepaste bestanden wordt hersteld naar de versie vóór deze commit. Live in ~60 seconden.`,
+        confirmLabel: "Ja, draai terug",
+        cancelLabel: "Annuleer",
+        destructive: true,
+      });
+      if (!ok) return;
+      setReverting(commit.sha);
+      try {
+        const res = await fetch("/api/admin/revert", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ sha: commit.sha }),
+        });
+        const data = (await res.json()) as RevertResponse;
+        if (!data.ok) {
+          toast.error(`Terugdraaien mislukt: ${data.error}`);
+          return;
+        }
+        const skippedNote =
+          data.skipped && data.skipped.length > 0
+            ? ` (${data.skipped.length} bestand${data.skipped.length === 1 ? "" : "en"} overgeslagen)`
+            : "";
+        toast.success(
+          `✓ Teruggedraaid in 1 commit. ${data.filesReverted.length} bestand${data.filesReverted.length === 1 ? "" : "en"} hersteld${skippedNote}.`,
+        );
+        setReloadKey((k) => k + 1);
+      } catch (e) {
+        toast.error(
+          `Netwerkfout: ${e instanceof Error ? e.message : "onbekend"}`,
+        );
+      } finally {
+        setReverting(null);
+      }
+    },
+    [confirm, toast],
+  );
 
   return (
     <div>
@@ -152,6 +212,17 @@ export function RecentChanges({
                   </a>
                 </div>
               </div>
+              {showRevert && c.isAdmin && (
+                <button
+                  type="button"
+                  className="em-btn em-btn-danger em-btn-small"
+                  onClick={() => void onRevert(c)}
+                  disabled={reverting !== null}
+                  title="Draai deze wijziging terug"
+                >
+                  {reverting === c.sha ? "Bezig…" : "Terugdraaien"}
+                </button>
+              )}
             </li>
           ))}
         </ol>

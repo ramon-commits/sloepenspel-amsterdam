@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import { ADMIN_PAGES, getPageById } from "@/lib/admin-content-schema";
 import { useToast } from "./components/Toast";
 import { useConfirm } from "./components/ConfirmDialog";
+import { useUnsavedChanges } from "./components/UnsavedChanges";
 import { DashboardView } from "./views/DashboardView";
 import { PageContentView } from "./views/PageContentView";
 import { DataListView } from "./views/DataListView";
@@ -47,10 +48,13 @@ export function AdminShell({ counts }: { counts: SidebarCounts }) {
   const router = useRouter();
   const toast = useToast();
   const confirm = useConfirm();
+  const { confirmDiscard } = useUnsavedChanges();
 
   const [active, setActive] = useState<string>(DASHBOARD_ID);
   const [search, setSearch] = useState("");
   const [loggingOut, setLoggingOut] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const closeSidebar = useCallback(() => setSidebarOpen(false), []);
 
   const grouped = useMemo(() => {
     const byCategory: Record<"content" | "data" | "site", typeof ADMIN_PAGES> =
@@ -97,6 +101,8 @@ export function AdminShell({ counts }: { counts: SidebarCounts }) {
 
   const handleLogout = useCallback(async () => {
     if (loggingOut) return;
+    const ok = await confirmDiscard();
+    if (!ok) return;
     setLoggingOut(true);
     try {
       await fetch("/api/admin/logout", { method: "POST" });
@@ -106,7 +112,7 @@ export function AdminShell({ counts }: { counts: SidebarCounts }) {
       toast.error("Uitloggen mislukt, probeer opnieuw");
       setLoggingOut(false);
     }
-  }, [loggingOut, router, toast]);
+  }, [loggingOut, router, toast, confirmDiscard]);
 
   // Keyboard: Cmd/Ctrl+K focuses the search.
   useEffect(() => {
@@ -124,8 +130,37 @@ export function AdminShell({ counts }: { counts: SidebarCounts }) {
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
+  // Auto-close the slide-in sidebar when the user picks a destination.
+  // If a TextFieldEditor is open with dirty changes, prompt to discard.
+  const navigate = useCallback(
+    async (id: string) => {
+      const ok = await confirmDiscard();
+      if (!ok) return;
+      setActive(id);
+      setSidebarOpen(false);
+    },
+    [confirmDiscard],
+  );
+
   return (
-    <div className="em-shell">
+    <div className={`em-shell${sidebarOpen ? " is-sidebar-open" : ""}`}>
+      <button
+        type="button"
+        className="em-mobile-menu-btn"
+        aria-label="Open navigatie"
+        aria-expanded={sidebarOpen}
+        onClick={() => setSidebarOpen((v) => !v)}
+      >
+        <span aria-hidden>{sidebarOpen ? "✕" : "☰"}</span>
+      </button>
+      {sidebarOpen && (
+        <button
+          type="button"
+          className="em-sidebar-backdrop"
+          aria-label="Sluit navigatie"
+          onClick={closeSidebar}
+        />
+      )}
       <aside className="em-sidebar" aria-label="Admin navigatie">
         <div className="em-brand">
           <div className="em-brand-badge" aria-hidden>
@@ -153,7 +188,7 @@ export function AdminShell({ counts }: { counts: SidebarCounts }) {
               id={DASHBOARD_ID}
               label="Dashboard"
               active={active === DASHBOARD_ID}
-              onClick={() => setActive(DASHBOARD_ID)}
+              onClick={() => navigate(DASHBOARD_ID)}
             />
           )}
           {historyMatches && (
@@ -161,7 +196,7 @@ export function AdminShell({ counts }: { counts: SidebarCounts }) {
               id={HISTORY_ID}
               label="Wijzigingen"
               active={active === HISTORY_ID}
-              onClick={() => setActive(HISTORY_ID)}
+              onClick={() => navigate(HISTORY_ID)}
             />
           )}
           {(["content", "data", "site"] as const).map((cat) => {
@@ -179,7 +214,7 @@ export function AdminShell({ counts }: { counts: SidebarCounts }) {
                       id={page.id}
                       label={page.label}
                       active={active === page.id}
-                      onClick={() => setActive(page.id)}
+                      onClick={() => navigate(page.id)}
                       count={count}
                     />
                   );

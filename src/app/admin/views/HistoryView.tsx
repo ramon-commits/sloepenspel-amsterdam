@@ -38,7 +38,7 @@ export function HistoryView() {
         </label>
       </header>
 
-      <RecentChanges limit={50} adminOnly={adminOnly} />
+      <RecentChanges limit={50} adminOnly={adminOnly} showRevert />
 
       <p className="em-history-footnote">
         Geschiedenis komt rechtstreeks van GitHub

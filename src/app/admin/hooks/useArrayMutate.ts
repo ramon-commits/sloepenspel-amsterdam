@@ -93,13 +93,7 @@ export function useArrayMutate({
         });
         const data = (await res.json()) as SaveResponse;
         if (!data.ok) {
-          if (data.code === "parse" && source.fileType === "ts-object") {
-            toast.error(
-              "TS-arrays toevoegen/verwijderen werkt nog niet — gebruik een JSON-bron of bewerk inline.",
-            );
-          } else {
-            toast.error(`Opslaan mislukt: ${data.error}`);
-          }
+          toast.error(`Opslaan mislukt: ${data.error}`);
           return false;
         }
         onSaved?.();

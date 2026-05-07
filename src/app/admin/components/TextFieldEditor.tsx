@@ -12,6 +12,7 @@ import type { ContentField, ContentSource } from "@/lib/admin-content-schema";
 import { countWords } from "@/lib/admin-path";
 import { useFieldSave } from "../hooks/useFieldSave";
 import { useToast } from "./Toast";
+import { useDirtyTracker } from "./UnsavedChanges";
 
 type Props = {
   field: ContentField;
@@ -61,6 +62,10 @@ export function TextFieldEditor({
   const hasError = wordsOver || hasEmDash;
   const dirty = draft !== committedValue;
   const saving = status.status === "saving";
+
+  // Register with the unsaved-changes provider so the global banner +
+  // beforeunload guard fire when this editor has work in progress.
+  useDirtyTracker(editing && dirty);
 
   const startEdit = useCallback(() => {
     if (editing) return;
@@ -238,6 +243,7 @@ export function TextFieldEditor({
               className="em-btn em-btn-secondary"
               onClick={cancelEdit}
               disabled={saving}
+              title="Annuleer (Esc)"
             >
               Annuleer
             </button>
@@ -251,7 +257,7 @@ export function TextFieldEditor({
                   ? wordsOver
                     ? "Maak de tekst korter"
                     : "Verwijder de em-dash"
-                  : "Opslaan (Cmd+Enter)"
+                  : "Opslaan (⌘ + Enter)"
               }
             >
               {saving ? "Opslaan…" : "Opslaan"}

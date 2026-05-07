@@ -6,6 +6,93 @@ beslissingen die voor latere stappen relevant zijn.
 
 ---
 
+## Stap 4 — TS array CRUD, batch commits, revert, responsive, polish
+
+**Datum:** 7 mei 2026
+**Commit:** zie `git log --grep "admin: stap 4"`
+
+### Wat er staat
+
+**Server**
+
+| Bestand | Rol |
+|---|---|
+| `src/lib/admin-file-parsers.ts` | Uitgebreid met `writeTsObjectValue` — vervangt elke literal range (string / number / boolean / array / object) door een eigen TS-source serialiser die 2-space indent, ongequote identifier-keys en trailing commas houdt zoals het project verwacht. Indent wordt gedetecteerd uit de bron. `writeField` dispatcht nu strings naar de fast-path en alle andere waarden naar de waarde-serialiser. |
+| `src/lib/admin-github-batch.ts` | Batch-commit helper via de GitHub git-data API (refs → blobs → trees → commits → fast-forward ref). Eén commit, N bestanden. |
+| `src/app/api/admin/batch/route.ts` | Hogere-laag PUT — accepteert N field-changes, groepeert per file, past `writeField` sequentieel toe per bestand, commit alles in 1 git-data commit. Short-circuit als alles unchanged is. |
+| `src/app/api/admin/revert/route.ts` | POST `{ sha }` — leest commit-detail van GitHub, haalt voor elk gewijzigd bestand de parent-versie op, reverteert in 1 batch-commit. Toegevoegde bestanden worden overgeslagen met een nette `skipped` lijst (delete vereist andere tree-API). |
+
+**UI**
+
+| Bestand | Rol |
+|---|---|
+| `src/app/admin/components/UnsavedChanges.tsx` | Context provider + `useDirtyTracker` hook + sticky banner ("3 niet-opgeslagen wijzigingen") + `beforeunload` guard + `confirmDiscard()` helper voor sidebar-nav en logout. |
+| `src/app/admin/components/AdminErrorBoundary.tsx` | Last-resort React error boundary. Toont "Er ging iets mis" met retry. Wordt op layout-niveau in de provider-stack gemount, dus elke admin-pagina valt erin. |
+| `src/app/admin/components/AiChangePanel.tsx` | Gebruikt nu `/api/admin/batch` ipv N losse field-saves → 1 atomic commit per AI-request. Bij fout valt-ie netjes terug naar de preview-state zodat de gebruiker kan corrigeren. |
+| `src/app/admin/components/RecentChanges.tsx` | Optioneel `showRevert` prop. Per admin-commit een `Terugdraaien` knop die confirm-dialog toont en `/api/admin/revert` aanroept; refresht de tijdlijn na succes. |
+| `src/app/admin/components/ArrayEditor.tsx` | Toevoegen/verwijderen/dupliceren ENABLED voor zowel JSON- als TS-bronnen. De disabled-state + waarschuwingstooltip zijn weg — TS arrays werken nu volledig dankzij de nieuwe parser. |
+| `src/app/admin/components/TextFieldEditor.tsx` | Registreert via `useDirtyTracker` zodra het in edit-mode is met dirty draft. Save/cancel knoppen hebben tooltips met keyboard shortcuts (`Annuleer (Esc)`, `Opslaan (⌘ + Enter)`). |
+| `src/app/admin/AdminShell.tsx` | Hamburger menu (`em-mobile-menu-btn`) + overlay sidebar onder 1024px. Sidebar nav + logout roepen `confirmDiscard()` aan voordat ze switchen — geen verloren werk meer. |
+| `src/app/admin/views/HistoryView.tsx` | Geeft `showRevert` door aan RecentChanges. |
+| `src/app/admin/layout.tsx` | Provider-stack uitgebreid: ToastProvider → ConfirmProvider → UnsavedChangesProvider → AdminErrorBoundary → children. |
+| `src/app/admin/admin.css` | +200 regels: `em-mobile-menu-btn`, `em-sidebar-backdrop`, `em-unsaved-banner`, `em-error-boundary`, `em-rate-banner` skeleton, `em-btn-small`, mobile breakpoints (1024 / 480) met sidebar-translate animatie. |
+
+### Architecturale keuzes
+
+1. **TS array CRUD via surgische literal replacement.** De serialiser kijkt naar de indent-kolom van de bestaande literal en bouwt de nieuwe TS source met dezelfde stijl. Geen prettier-roundtrip, geen reformat van surrounding code, geen risk op dependency-explosie. Unit-getest met 17 cases (zie `_test-ts-value.ts` workflow): array toevoegen, array item verwijderen, hele object vervangen, string fast-path behouden, line-count behouden, sibling exports onaangeroerd, special chars (quotes / euro / accenten) round-trippen.
+2. **Batch commit via git-data API ipv contents API.** Niet meer "N losse PUTs op `contents` voor N files" maar één atomic commit. Dat geeft één Netlify rebuild i.p.v. N. Helper: `batchCommit([{path, content}], message)` doet refs-GET → blobs-POST → trees-POST → commits-POST → ref-PATCH.
+3. **AiChangePanel gebruikt batch onvoorwaardelijk.** Ook bij 1 wijziging — de batch route schakelt onder de motorkap intern naar de simpele PUT als er maar één file is. Die is even atomic dus de aanroeper hoeft niet te kiezen.
+4. **Revert via batch commit.** "Reverten" voert geen `git revert` uit (zou een merge-style commit zijn). In plaats daarvan: vraag GitHub welke files de target-commit aanraakte, lees de parent-versie van elk, push die in 1 batch commit. Resultaat is een schone "revert: …" commit zonder merge-noise.
+5. **Unsaved-changes via een ref-set + count state.** De Set van dirty IDs zit in een ref zodat re-renders niet kost-N zijn met N veld-edits open. Alleen de count triggert re-renders — dat is wat de banner nodig heeft.
+6. **Geen rich-text/markdown editor.** Privacy + algemene voorwaarden body's leven in `src/app/*/page.tsx` als JSX, niet in `/content/`. Een editor voor TSX is een ander beest (vereist serialisatie van JSX nodes). Defer tot er een echte content-pijpleiding komt.
+7. **Geen drag-and-drop.** Up/down knoppen werken voor 5-20 items per array; DnD voegt complexity toe zonder duidelijke winst op admin-volumes.
+
+### Beperkingen / vooruitschuifjes
+
+- **Markdown / TSX body editing** — privacy + AV body zit in TSX componenten. Editor daarvoor komt zodra die content naar `/content/*.md` verhuist.
+- **Rate-limit banner** — de `GitHubAdminError(code: "rate-limit")` wordt nu netjes als toast.error getoond, en de CSS voor een dedicated banner staat klaar (`.em-rate-banner`). Een banner-component die de `X-RateLimit-Remaining` header proactief monitort komt zodra we GitHub rate-limit issues in productie tegenkomen.
+- **Add-vóór-positie / drag-reorder** — alleen append + up/down. Voor 80% van de admin-flows is dat voldoende.
+- **Add nieuwe foto onder andere bestandsnaam** — upload vervangt nu altijd op het bestaande pad; toekomstige variant: bestandsnaam-versionering om CDN-cache automatisch te bust en parallelle versies te bewaren.
+
+### Tests
+
+| Categorie | Resultaat |
+|---|---|
+| `npx tsc --noEmit` | 0 errors |
+| `npm run build` | ✓ 66/66 pages, 11 admin API routes (/ai, /batch, /field, /github, /history, /kie, /login, /logout, /revert, /section, /upload) |
+| Parser unit tests (TS array round-trip, object replace, sibling preservation, line-count, special chars) | ✓ 17/17 |
+| Browser smoke: /admin → Team pagina laadt 3 leden uit TS bron, "+ Teamlid toevoegen" knop ENABLED | ✓ |
+| Mobile (375px): hamburger zichtbaar, sidebar verborgen, klik opent overlay met backdrop | ✓ |
+| Desktop (>1024px): hamburger verborgen, sidebar fixed | ✓ |
+| Cmd+Enter / Esc tooltips zichtbaar op save/cancel | ✓ |
+
+### Status na stap 4
+
+Het admin-systeem is **productie-klaar voor de Sloepenspel-flow**. Alles wat in de spec stond:
+
+- ✅ Tekstvelden bewerken met validatie (em-dash, woordlimiet)
+- ✅ JSON arrays CRUD (reviews, FAQ, restaurants, locations, services-arrays)
+- ✅ TS arrays CRUD (team.members, het-spel sections)
+- ✅ Foto's uploaden, AI bewerken (kie.ai), AI nieuw genereren
+- ✅ AI Change Request — klantverzoek → diff preview → 1 commit batch apply
+- ✅ Git history met klikbare SHA's en `Terugdraaien` per commit
+- ✅ Responsive (hamburger op tablet/mobile)
+- ✅ Beveiliging: HMAC cookie, env-var password, geen client-side keys
+- ✅ Conflict bescherming via GitHub sha-check
+- ✅ Unsaved-changes guard + beforeunload
+- ✅ Error boundary + toast feedback overal
+- ✅ Inter font, Endless Minds design system, geen leak naar publieke site
+
+**Hoeveel commits per actie:**
+- Tekstveld save → 1 commit
+- Foto upload (zelfde pad) → 1 commit
+- Foto upload (andere extensie) → 2 commits (file + field reference)
+- Array item add/remove/move/duplicate → 1 commit (whole array write)
+- AI Change Request met N wijzigingen → **1 commit** (batch via git-data)
+- Revert → **1 commit** (batch via git-data)
+
+---
+
 ## Stap 3 — Array CRUD, foto editor, AI Change Request, git history
 
 **Datum:** 7 mei 2026

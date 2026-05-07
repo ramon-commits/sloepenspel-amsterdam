@@ -258,6 +258,109 @@ export function writeTsObjectField(
 }
 
 // ─────────────────────────────────────────────────────────────────────
+// JS value → TS source serialiser
+//
+// Used by writeTsObjectValue to replace whole arrays / objects in a TS
+// content file. Matches the prevailing project style:
+//   • 2-space indent
+//   • unquoted keys when valid identifier
+//   • double-quoted strings
+//   • trailing commas on multi-line lists/objects
+// ─────────────────────────────────────────────────────────────────────
+
+const VALID_IDENTIFIER = /^[A-Za-z_$][A-Za-z0-9_$]*$/u;
+
+function isValidIdentifier(key: string): boolean {
+  return VALID_IDENTIFIER.test(key);
+}
+
+function serializeJsToTs(value: unknown, indentLevel: number): string {
+  const indent = "  ".repeat(indentLevel);
+  const childIndent = "  ".repeat(indentLevel + 1);
+
+  if (value === null) return "null";
+  if (value === undefined) return "undefined";
+  if (typeof value === "string") return JSON.stringify(value);
+  if (typeof value === "number" || typeof value === "boolean") {
+    return String(value);
+  }
+
+  if (Array.isArray(value)) {
+    if (value.length === 0) return "[]";
+    const items = value.map((v) => `${childIndent}${serializeJsToTs(v, indentLevel + 1)}`);
+    return `[\n${items.join(",\n")},\n${indent}]`;
+  }
+
+  if (typeof value === "object") {
+    const entries = Object.entries(value as Record<string, unknown>);
+    if (entries.length === 0) return "{}";
+    const lines = entries.map(([k, v]) => {
+      const keyStr = isValidIdentifier(k) ? k : JSON.stringify(k);
+      return `${childIndent}${keyStr}: ${serializeJsToTs(v, indentLevel + 1)}`;
+    });
+    return `{\n${lines.join(",\n")},\n${indent}}`;
+  }
+
+  return JSON.stringify(value);
+}
+
+/**
+ * Detect the indent level of the AST node by looking at the column its
+ * starting line begins with. Defaults to 2 (typical for our pages file).
+ */
+function detectIndentLevel(source: string, nodeStart: number): number {
+  // Walk back from nodeStart to the line start.
+  let i = nodeStart;
+  while (i > 0 && source[i - 1] !== "\n") i--;
+  let level = 0;
+  while (i < source.length && (source[i] === " " || source[i] === "\t")) {
+    if (source[i] === " ") level += 0.5; // 2-space indent → 0.5 per char
+    else level++; // tab counts as one level
+    i++;
+  }
+  return Math.max(0, Math.round(level));
+}
+
+/**
+ * Replace any literal value at `path` inside a TS object export.
+ * Strings, numbers, booleans, arrays, and plain objects are all
+ * supported. The serialiser matches the project's existing format
+ * (2-space indent, trailing commas, unquoted identifier keys).
+ */
+export function writeTsObjectValue(
+  source: string,
+  exportName: string,
+  path: string,
+  newValue: unknown,
+): WriteResult {
+  const found = findNamedExport(source, exportName);
+  if (!found) {
+    return { ok: false, error: `Export "${exportName}" not found in file` };
+  }
+  const parts = parsePath(path);
+  if (parts.length === 0) {
+    return {
+      ok: false,
+      error: "writeTsObjectValue cannot replace whole exports yet",
+    };
+  }
+  const node = navigateAst(found.initializer, parts);
+  if (!node) {
+    return { ok: false, error: `Path "${path}" not found in ${exportName}` };
+  }
+
+  const start = node.getStart(found.sourceFile);
+  const end = node.getEnd();
+  const indentLevel = detectIndentLevel(source, start);
+  const replacement = serializeJsToTs(newValue, indentLevel);
+
+  return {
+    ok: true,
+    source: source.substring(0, start) + replacement + source.substring(end),
+  };
+}
+
+// ─────────────────────────────────────────────────────────────────────
 // Markdown frontmatter (read-only stub for stap 2)
 //
 // We leave write support to a later step where it will be exercised by
@@ -307,13 +410,18 @@ export function writeField(
     if (!locator.exportName) {
       return { ok: false, error: "ts-object writes require an exportName" };
     }
-    if (typeof newValue !== "string") {
-      return {
-        ok: false,
-        error: "ts-object writes only support string values in stap 2",
-      };
+    // Strings → use writeTsObjectField (fast path, only touches the literal).
+    // Anything else (array / object / number / boolean) → writeTsObjectValue
+    // serialises the new value into TS source matching the file's style.
+    if (typeof newValue === "string") {
+      return writeTsObjectField(
+        source,
+        locator.exportName,
+        locator.path,
+        newValue,
+      );
     }
-    return writeTsObjectField(
+    return writeTsObjectValue(
       source,
       locator.exportName,
       locator.path,
@@ -323,7 +431,7 @@ export function writeField(
   if (fileType === "markdown-frontmatter") {
     return {
       ok: false,
-      error: "Markdown writes are not implemented in stap 2",
+      error: "Markdown writes are not implemented yet",
     };
   }
   return { ok: false, error: `Unknown file type: ${fileType as string}` };

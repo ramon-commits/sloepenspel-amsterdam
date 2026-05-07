@@ -41,8 +41,6 @@ export function ArrayEditor({
     onSaved,
   });
 
-  const isTsArray = section.source.fileType === "ts-object";
-
   return (
     <div className="em-array-editor">
       <div className="em-content-toolbar em-array-toolbar">
@@ -59,12 +57,8 @@ export function ArrayEditor({
           type="button"
           className="em-btn em-btn-primary"
           onClick={() => void add()}
-          disabled={busy !== null || isTsArray}
-          title={
-            isTsArray
-              ? "Items toevoegen voor TypeScript-bronnen volgt later — bewerk bestaande items inline."
-              : `Voeg een nieuwe ${section.arrayItemLabel ?? "item"} toe`
-          }
+          disabled={busy !== null}
+          title={`Voeg een nieuwe ${section.arrayItemLabel ?? "item"} toe`}
         >
           + {section.arrayItemLabel ?? "Item"} toevoegen
         </button>
@@ -77,9 +71,7 @@ export function ArrayEditor({
           </div>
           <div className="em-empty-title">Nog geen {section.arrayItemLabel ?? "items"}</div>
           <div className="em-empty-sub">
-            {isTsArray
-              ? "TypeScript-bronnen ondersteunen toevoegen nog niet."
-              : "Klik op de knop hierboven om er één aan te maken."}
+            Klik op de knop hierboven om er één aan te maken.
           </div>
         </div>
       ) : (
@@ -89,7 +81,6 @@ export function ArrayEditor({
             section={section}
             items={items}
             index={index}
-            isTsArray={isTsArray}
             defaultOpen={defaultOpenFirst && index === 0}
             busy={busy !== null}
             onSaved={onSaved}
@@ -122,7 +113,6 @@ type ItemProps = {
   section: ContentSection;
   items: unknown[];
   index: number;
-  isTsArray: boolean;
   defaultOpen: boolean;
   busy: boolean;
   onSaved: () => void;
@@ -136,7 +126,6 @@ function ArrayItemCard({
   section,
   items,
   index,
-  isTsArray,
   defaultOpen,
   busy,
   onSaved,
@@ -182,7 +171,7 @@ function ArrayItemCard({
           aria-label="Dupliceren"
           title="Dupliceren"
           onClick={onDuplicate}
-          disabled={busy || isTsArray}
+          disabled={busy}
         >
           ⊕
         </button>
@@ -192,7 +181,7 @@ function ArrayItemCard({
           aria-label="Verwijderen"
           title="Verwijderen"
           onClick={onDelete}
-          disabled={busy || isTsArray}
+          disabled={busy}
         >
           ✕
         </button>

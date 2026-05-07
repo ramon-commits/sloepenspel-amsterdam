@@ -38,8 +38,15 @@ type AiResponse =
     }
   | { ok: false; error: string; code?: string };
 
-type FieldSaveResponse =
-  | { ok: true; sha: string; commitUrl?: string; unchanged?: boolean }
+type BatchResponse =
+  | {
+      ok: true;
+      sha?: string;
+      commitUrl?: string;
+      filesCommitted?: string[];
+      unchanged?: boolean;
+      skipped?: string[];
+    }
   | { ok: false; error: string; code?: string };
 
 type Phase =
@@ -139,49 +146,70 @@ export function AiChangePanel({ onAfterApply }: { onAfterApply?: () => void }) {
     const ok = await confirm({
       title: `Pas ${toApply.length} wijziging${toApply.length === 1 ? "" : "en"} toe?`,
       description:
-        "Elke wijziging wordt als afzonderlijke commit naar GitHub gepusht. Netlify rebuildt automatisch en de site staat binnen 1-2 minuten bijgewerkt live.",
+        "Alle wijzigingen worden als één commit naar GitHub gepusht. Netlify rebuildt automatisch en de site staat binnen 1-2 minuten bijgewerkt live.",
       confirmLabel: "Ja, doorvoeren",
       cancelLabel: "Annuleer",
     });
     if (!ok) return;
 
     setPhase({ kind: "applying", checked: phase.checked });
-    let success = 0;
-    let failures = 0;
-    for (const change of toApply) {
-      try {
-        const res = await fetch("/api/admin/field", {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            file: change.file,
-            fileType: change.fileType,
-            exportName: change.exportName,
-            path: change.path,
-            value: change.newValue,
-            message: `admin: AI — ${change.reason}`.slice(0, 120),
-          }),
-        });
-        const data = (await res.json()) as FieldSaveResponse;
-        if (data.ok) success++;
-        else failures++;
-      } catch {
-        failures++;
-      }
-    }
 
-    if (failures === 0) {
-      toast.success(`✓ ${success} wijziging${success === 1 ? "" : "en"} doorgevoerd.`);
-    } else if (success === 0) {
-      toast.error(`Geen wijzigingen doorgevoerd (${failures} fouten).`);
-    } else {
-      toast.warning(
-        `${success} doorgevoerd, ${failures} mislukt. Check de mislukte items handmatig.`,
+    // Batch all approved changes into one commit. Even when they touch
+    // multiple files (reviews.json + pages/index.ts + …) the git-data
+    // backend pushes a single atomic commit → one Netlify rebuild.
+    const summary = toApply.length === 1
+      ? toApply[0].reason
+      : `${toApply.length} wijzigingen via AI assistent`;
+    const message = `admin: ${summary}`.slice(0, 200);
+
+    try {
+      const res = await fetch("/api/admin/batch", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          changes: toApply.map((c) => ({
+            file: c.file,
+            fileType: c.fileType,
+            exportName: c.exportName,
+            path: c.path,
+            value: c.newValue,
+          })),
+          message,
+        }),
+      });
+      const data = (await res.json()) as BatchResponse;
+      if (!data.ok) {
+        toast.error(`Doorvoeren mislukt: ${data.error}`);
+        // Restore preview phase so the user can adjust and retry.
+        setPhase({
+          kind: "preview",
+          changes: phase.changes,
+          checked: phase.checked,
+          model: "(retry)",
+        });
+        return;
+      }
+      if (data.unchanged) {
+        toast.info("Geen verandering nodig — content was al up-to-date.");
+      } else {
+        toast.success(
+          `✓ ${toApply.length} wijziging${toApply.length === 1 ? "" : "en"} in 1 commit doorgevoerd.`,
+        );
+      }
+      setInput("");
+      setPhase({ kind: "idle" });
+      onAfterApply?.();
+    } catch (e) {
+      toast.error(
+        `Netwerkfout: ${e instanceof Error ? e.message : "onbekend"}`,
       );
+      setPhase({
+        kind: "preview",
+        changes: phase.changes,
+        checked: phase.checked,
+        model: "(retry)",
+      });
     }
-    setInput("");
-    setPhase({ kind: "idle" });
-    onAfterApply?.();
   }, [phase, confirm, toast, onAfterApply]);
 
   return (
