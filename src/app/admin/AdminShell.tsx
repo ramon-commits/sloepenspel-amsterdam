@@ -1,9 +1,19 @@
 "use client";
 
-import { useCallback, useMemo, useState, type ReactNode } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { useRouter } from "next/navigation";
+import { ADMIN_PAGES, getPageById } from "@/lib/admin-content-schema";
 import { useToast } from "./components/Toast";
 import { useConfirm } from "./components/ConfirmDialog";
+import { DashboardView } from "./views/DashboardView";
+import { PageContentView } from "./views/PageContentView";
+import { DataListView } from "./views/DataListView";
+import { SiteConfigView } from "./views/SiteConfigView";
 
 export type SidebarCounts = {
   reviews: number;
@@ -14,109 +24,72 @@ export type SidebarCounts = {
   team: number;
 };
 
-type ItemId =
-  // CONTENT
-  | "homepage"
-  | "het-spel"
-  | "locaties-pagina"
-  | "prijzen-pagina"
-  | "over"
-  | "contact"
-  | "english"
-  | "privacy"
-  | "voorwaarden"
-  // DATA
-  | "reviews"
-  | "faq"
-  | "restaurants"
-  | "locations"
-  | "blog"
-  | "team"
-  | "services"
-  | "pricing"
-  // SITE
-  | "config"
-  | "images"
-  | "navigation";
-
-type Item = {
-  id: ItemId;
-  label: string;
-  count?: number;
+const COUNT_BY_PAGE_ID: Record<string, keyof SidebarCounts> = {
+  reviews: "reviews",
+  faq: "faq",
+  restaurants: "restaurants",
+  locations: "locations",
+  blog: "blog",
+  team: "team",
 };
 
-type Section = {
-  id: "content" | "data" | "site";
-  label: string;
-  items: Item[];
+const SECTION_LABEL: Record<"content" | "data" | "site", string> = {
+  content: "Content",
+  data: "Data",
+  site: "Site",
 };
+
+const DASHBOARD_ID = "dashboard";
 
 export function AdminShell({ counts }: { counts: SidebarCounts }) {
   const router = useRouter();
   const toast = useToast();
   const confirm = useConfirm();
-  const [active, setActive] = useState<ItemId>("homepage");
+
+  const [active, setActive] = useState<string>(DASHBOARD_ID);
+  const [search, setSearch] = useState("");
   const [loggingOut, setLoggingOut] = useState(false);
 
-  const sections: Section[] = useMemo(
-    () => [
-      {
-        id: "content",
-        label: "Content",
-        items: [
-          { id: "homepage", label: "Homepage" },
-          { id: "het-spel", label: "Het Spel" },
-          { id: "locaties-pagina", label: "Locaties" },
-          { id: "prijzen-pagina", label: "Prijzen" },
-          { id: "over", label: "Over Ons" },
-          { id: "contact", label: "Contact" },
-          { id: "english", label: "English" },
-          { id: "privacy", label: "Privacy" },
-          { id: "voorwaarden", label: "Voorwaarden" },
-        ],
-      },
-      {
-        id: "data",
-        label: "Data",
-        items: [
-          { id: "reviews", label: "Reviews", count: counts.reviews },
-          { id: "faq", label: "FAQ", count: counts.faq },
-          { id: "restaurants", label: "Restaurants", count: counts.restaurants },
-          { id: "locations", label: "Locaties", count: counts.locations },
-          { id: "blog", label: "Blog", count: counts.blog },
-          { id: "team", label: "Team", count: counts.team },
-          { id: "services", label: "Diensten / USPs" },
-          { id: "pricing", label: "Pricing" },
-        ],
-      },
-      {
-        id: "site",
-        label: "Site",
-        items: [
-          { id: "config", label: "Config" },
-          { id: "images", label: "Afbeeldingen" },
-          { id: "navigation", label: "Navigatie" },
-        ],
-      },
-    ],
-    [counts],
+  const grouped = useMemo(() => {
+    const byCategory: Record<"content" | "data" | "site", typeof ADMIN_PAGES> =
+      { content: [], data: [], site: [] };
+    for (const page of ADMIN_PAGES) {
+      byCategory[page.category].push(page);
+    }
+    return byCategory;
+  }, []);
+
+  const matchesSearch = useCallback(
+    (label: string) => {
+      const q = search.trim().toLowerCase();
+      if (!q) return true;
+      return label.toLowerCase().includes(q);
+    },
+    [search],
   );
 
-  const activeItem = useMemo(
-    () => sections.flatMap((s) => s.items).find((i) => i.id === active),
-    [sections, active],
-  );
+  const filtered = useMemo(() => {
+    return {
+      content: grouped.content.filter((p) => matchesSearch(p.label)),
+      data: grouped.data.filter((p) => matchesSearch(p.label)),
+      site: grouped.site.filter((p) => matchesSearch(p.label)),
+    };
+  }, [grouped, matchesSearch]);
+
+  const totalMatches =
+    filtered.content.length + filtered.data.length + filtered.site.length;
+  const dashboardMatches = matchesSearch("Dashboard");
 
   const handlePublish = useCallback(async () => {
     const ok = await confirm({
-      title: "Publiceer alle wijzigingen?",
+      title: "Publicatie via GitHub",
       description:
-        "Niet-opgeslagen wijzigingen worden naar GitHub gepusht en gaan na ~1-2 minuten live op sloepenspel.nl.",
-      confirmLabel: "Publiceer",
-      cancelLabel: "Nog niet",
+        "Wijzigingen worden bij elke 'Opslaan' al direct via GitHub gecommit en Netlify zet ze automatisch live binnen ~60 seconden. Een aparte publish-flow (batch + preview) volgt in stap 4.",
+      confirmLabel: "Begrepen",
+      cancelLabel: "Sluit",
     });
     if (!ok) return;
-    toast.info("Publish-flow wordt gebouwd in stap 5.");
+    toast.info("Per-veld wijzigingen worden direct doorgevoerd.");
   }, [confirm, toast]);
 
   const handleLogout = useCallback(async () => {
@@ -132,6 +105,22 @@ export function AdminShell({ counts }: { counts: SidebarCounts }) {
     }
   }, [loggingOut, router, toast]);
 
+  // Keyboard: Cmd/Ctrl+K focuses the search.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      const isCmdK = (e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k";
+      if (isCmdK) {
+        const input = document.getElementById("em-sidebar-search");
+        if (input) {
+          e.preventDefault();
+          (input as HTMLInputElement).focus();
+        }
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+
   return (
     <div className="em-shell">
       <aside className="em-sidebar" aria-label="Admin navigatie">
@@ -145,28 +134,51 @@ export function AdminShell({ counts }: { counts: SidebarCounts }) {
           </div>
         </div>
 
+        <div className="em-search">
+          <input
+            id="em-sidebar-search"
+            type="search"
+            placeholder="Zoek pagina (Cmd+K)"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </div>
+
         <nav className="em-nav">
-          {sections.map((section) => (
-            <div key={section.id}>
-              <div className="em-nav-section">{section.label}</div>
-              {section.items.map((item) => (
-                <button
-                  key={item.id}
-                  type="button"
-                  onClick={() => setActive(item.id)}
-                  className={`em-nav-item${
-                    active === item.id ? " is-active" : ""
-                  }`}
-                  aria-current={active === item.id ? "page" : undefined}
-                >
-                  <span>{item.label}</span>
-                  {typeof item.count === "number" && (
-                    <span className="em-nav-count">{item.count}</span>
-                  )}
-                </button>
-              ))}
-            </div>
-          ))}
+          {dashboardMatches && (
+            <NavItem
+              id={DASHBOARD_ID}
+              label="Dashboard"
+              active={active === DASHBOARD_ID}
+              onClick={() => setActive(DASHBOARD_ID)}
+            />
+          )}
+          {(["content", "data", "site"] as const).map((cat) => {
+            const items = filtered[cat];
+            if (items.length === 0) return null;
+            return (
+              <div key={cat}>
+                <div className="em-nav-section">{SECTION_LABEL[cat]}</div>
+                {items.map((page) => {
+                  const countKey = COUNT_BY_PAGE_ID[page.id];
+                  const count = countKey ? counts[countKey] : undefined;
+                  return (
+                    <NavItem
+                      key={page.id}
+                      id={page.id}
+                      label={page.label}
+                      active={active === page.id}
+                      onClick={() => setActive(page.id)}
+                      count={count}
+                    />
+                  );
+                })}
+              </div>
+            );
+          })}
+          {totalMatches === 0 && !dashboardMatches && (
+            <div className="em-nav-empty">Geen resultaten voor &quot;{search}&quot;.</div>
+          )}
         </nav>
 
         <div className="em-sidebar-footer">
@@ -209,46 +221,97 @@ export function AdminShell({ counts }: { counts: SidebarCounts }) {
 
       <main className="em-main">
         <div className="em-content">
-          {/* keyed wrapper makes React unmount/remount on item change → fade-in */}
-          <div key={active} className="em-fade-in">
-            <PagePlaceholder label={activeItem?.label ?? "Onbekend"} />
-          </div>
+          <ActiveView
+            key={active}
+            active={active}
+            onNavigate={setActive}
+            counts={counts}
+          />
         </div>
       </main>
     </div>
   );
 }
 
-function PagePlaceholder({ label }: { label: string }): ReactNode {
+function NavItem({
+  id,
+  label,
+  active,
+  onClick,
+  count,
+}: {
+  id: string;
+  label: string;
+  active: boolean;
+  onClick: () => void;
+  count?: number;
+}) {
   return (
-    <>
-      <header className="em-page-header">
-        <div>
-          <h1 className="em-page-title">{label}</h1>
-          <div className="em-page-sub">
-            Content editor wordt gebouwd in stap 2 t/m 7.
-          </div>
-        </div>
-        <a
-          href="/"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="em-page-link"
-        >
-          Bekijk site <span aria-hidden>↗</span>
-        </a>
-      </header>
+    <button
+      type="button"
+      onClick={onClick}
+      className={`em-nav-item${active ? " is-active" : ""}`}
+      aria-current={active ? "page" : undefined}
+      data-nav-id={id}
+    >
+      <span>{label}</span>
+      {typeof count === "number" && (
+        <span className="em-nav-count">{count}</span>
+      )}
+    </button>
+  );
+}
 
+function ActiveView({
+  active,
+  onNavigate,
+  counts,
+}: {
+  active: string;
+  onNavigate: (id: string) => void;
+  counts: SidebarCounts;
+}) {
+  if (active === DASHBOARD_ID) {
+    const totalSections = ADMIN_PAGES.reduce(
+      (sum, p) => sum + p.sections.length,
+      0,
+    );
+    return (
+      <DashboardView
+        onNavigate={onNavigate}
+        counts={{
+          pages: ADMIN_PAGES.length,
+          sections: totalSections,
+          files: 8, // pages/index.ts + 7 json/ts content files
+        }}
+      />
+    );
+  }
+  const page = getPageById(active);
+  if (!page) {
+    return (
       <div className="em-empty">
         <div className="em-empty-icon" aria-hidden>
-          ○
+          ?
         </div>
-        <div className="em-empty-title">Editor in aanbouw</div>
+        <div className="em-empty-title">Pagina niet gevonden</div>
         <div className="em-empty-sub">
-          De visuele editor voor &ldquo;{label}&rdquo; verschijnt zodra stap 2
-          is opgeleverd.
+          De geselecteerde pagina ({active}) staat niet in het schema.
         </div>
       </div>
-    </>
-  );
+    );
+  }
+
+  // Avoid the unused import warning when SidebarCounts is referenced through props.
+  void counts;
+
+  switch (page.view) {
+    case "data-list":
+      return <DataListView page={page} />;
+    case "site-config":
+      return <SiteConfigView page={page} />;
+    case "page-content":
+    default:
+      return <PageContentView page={page} />;
+  }
 }
