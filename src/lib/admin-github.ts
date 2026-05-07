@@ -76,7 +76,8 @@ function decodeBase64(content: string): string {
   return Buffer.from(cleaned, "base64").toString("utf8");
 }
 
-function encodeBase64(content: string): string {
+function encodeBase64(content: string | Buffer): string {
+  if (Buffer.isBuffer(content)) return content.toString("base64");
   return Buffer.from(content, "utf8").toString("base64");
 }
 
@@ -85,6 +86,20 @@ export type ReadFileResult = {
   sha: string;
   path: string;
 };
+
+/**
+ * Lookup the current sha for a file. Returns null when the file does not
+ * exist yet (used by upload to decide between create vs update).
+ */
+export async function tryGetSha(path: string): Promise<string | null> {
+  try {
+    const result = await readFile(path);
+    return result.sha;
+  } catch (e) {
+    if (e instanceof GitHubAdminError && e.code === "not-found") return null;
+    throw e;
+  }
+}
 
 /**
  * Read a file from the configured repo+branch. Throws GitHubAdminError on
@@ -130,8 +145,9 @@ export async function readFile(path: string): Promise<ReadFileResult> {
 
 export type WriteFileInput = {
   path: string;
-  content: string;
-  sha: string;
+  content: string | Buffer;
+  /** Required when overwriting; omit for new files. */
+  sha?: string;
   message: string;
 };
 
@@ -141,27 +157,30 @@ export type WriteFileResult = {
 };
 
 /**
- * Write a file via the GitHub Contents API. The caller MUST pass the sha
- * from the most recent read of this file; if it doesn't match GitHub's
- * current sha the request is rejected (409). That race-condition guard
- * keeps two admin sessions from silently overwriting each other.
+ * Write a file via the GitHub Contents API.
+ *
+ * For overwrites the caller MUST pass the sha from the most recent read
+ * of this file; if it doesn't match GitHub's current sha the request is
+ * rejected (409). For new files, omit sha — GitHub will create it.
  */
 export async function writeFile(
   input: WriteFileInput,
 ): Promise<WriteFileResult> {
   const env = readAdminEnv();
+  const body: Record<string, unknown> = {
+    message: input.message,
+    content: encodeBase64(input.content),
+    branch: env.branch,
+  };
+  if (input.sha) body.sha = input.sha;
+
   const res = await fetch(buildContentsUrl(env, input.path), {
     method: "PUT",
     headers: {
       ...authHeaders(env),
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({
-      message: input.message,
-      content: encodeBase64(input.content),
-      sha: input.sha,
-      branch: env.branch,
-    }),
+    body: JSON.stringify(body),
   });
 
   if (res.status === 409 || res.status === 422) {

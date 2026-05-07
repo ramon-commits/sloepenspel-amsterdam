@@ -14,6 +14,7 @@ import { DashboardView } from "./views/DashboardView";
 import { PageContentView } from "./views/PageContentView";
 import { DataListView } from "./views/DataListView";
 import { SiteConfigView } from "./views/SiteConfigView";
+import { HistoryView } from "./views/HistoryView";
 
 export type SidebarCounts = {
   reviews: number;
@@ -40,6 +41,7 @@ const SECTION_LABEL: Record<"content" | "data" | "site", string> = {
 };
 
 const DASHBOARD_ID = "dashboard";
+const HISTORY_ID = "history";
 
 export function AdminShell({ counts }: { counts: SidebarCounts }) {
   const router = useRouter();
@@ -79,6 +81,7 @@ export function AdminShell({ counts }: { counts: SidebarCounts }) {
   const totalMatches =
     filtered.content.length + filtered.data.length + filtered.site.length;
   const dashboardMatches = matchesSearch("Dashboard");
+  const historyMatches = matchesSearch("Wijzigingen");
 
   const handlePublish = useCallback(async () => {
     const ok = await confirm({
@@ -153,6 +156,14 @@ export function AdminShell({ counts }: { counts: SidebarCounts }) {
               onClick={() => setActive(DASHBOARD_ID)}
             />
           )}
+          {historyMatches && (
+            <NavItem
+              id={HISTORY_ID}
+              label="Wijzigingen"
+              active={active === HISTORY_ID}
+              onClick={() => setActive(HISTORY_ID)}
+            />
+          )}
           {(["content", "data", "site"] as const).map((cat) => {
             const items = filtered[cat];
             if (items.length === 0) return null;
@@ -176,7 +187,7 @@ export function AdminShell({ counts }: { counts: SidebarCounts }) {
               </div>
             );
           })}
-          {totalMatches === 0 && !dashboardMatches && (
+          {totalMatches === 0 && !dashboardMatches && !historyMatches && (
             <div className="em-nav-empty">Geen resultaten voor &quot;{search}&quot;.</div>
           )}
         </nav>
@@ -286,6 +297,9 @@ function ActiveView({
         }}
       />
     );
+  }
+  if (active === HISTORY_ID) {
+    return <HistoryView />;
   }
   const page = getPageById(active);
   if (!page) {

@@ -1,7 +1,7 @@
 "use client";
 
-import { useMemo } from "react";
 import type { ContentPage, ContentSection } from "@/lib/admin-content-schema";
+import { ArrayEditor } from "../components/ArrayEditor";
 import { SectionCard } from "../components/SectionCard";
 import { useContentSection } from "../hooks/useContentSection";
 
@@ -90,10 +90,10 @@ function SectionMount({
 
   if (section.isArray) {
     return (
-      <ArraySection
+      <ArrayEditor
         section={section}
         value={state.value}
-        defaultOpen={defaultOpen}
+        defaultOpenFirst={defaultOpen}
         onSaved={refetch}
       />
     );
@@ -107,78 +107,4 @@ function SectionMount({
       onSaved={refetch}
     />
   );
-}
-
-function ArraySection({
-  section,
-  value,
-  defaultOpen,
-  onSaved,
-}: {
-  section: ContentSection;
-  value: unknown;
-  defaultOpen: boolean;
-  onSaved: () => void;
-}) {
-  const items = useMemo(() => (Array.isArray(value) ? value : []), [value]);
-
-  if (items.length === 0) {
-    return (
-      <div className="em-empty">
-        <div className="em-empty-icon" aria-hidden>
-          ○
-        </div>
-        <div className="em-empty-title">{section.label}</div>
-        <div className="em-empty-sub">
-          Nog geen items. Toevoegen volgt in stap 6.
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <>
-      <div className="em-content-toolbar">
-        <span>
-          <strong>{section.label}</strong>
-          <span style={{ marginLeft: 8, color: "var(--color-text-light)" }}>
-            {items.length} {section.arrayItemLabel ?? "items"}
-          </span>
-        </span>
-        <span style={{ color: "var(--color-text-light)" }}>
-          + Toevoegen volgt in stap 6
-        </span>
-      </div>
-      {items.map((item: unknown, index: number) => {
-        const titleField = section.arrayItemTitleField;
-        const itemTitle = titleField
-          ? toShortTitle(getFromItem(item, titleField))
-          : null;
-        const heading = itemTitle
-          ? `${section.arrayItemLabel ?? "Item"} ${index + 1} — ${itemTitle}`
-          : `${section.arrayItemLabel ?? "Item"} ${index + 1}`;
-        return (
-          <SectionCard
-            key={index}
-            section={section}
-            value={items}
-            itemIndex={index}
-            defaultOpen={defaultOpen && index === 0}
-            titleOverride={heading}
-            onSaved={onSaved}
-          />
-        );
-      })}
-    </>
-  );
-}
-
-function getFromItem(item: unknown, key: string): unknown {
-  if (!item || typeof item !== "object") return null;
-  return (item as Record<string, unknown>)[key];
-}
-
-function toShortTitle(v: unknown): string {
-  if (typeof v !== "string") return "";
-  return v.length > 60 ? `${v.slice(0, 57)}…` : v;
 }

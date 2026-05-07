@@ -5,6 +5,7 @@ import type { ContentField, ContentSection } from "@/lib/admin-content-schema";
 import { fullFieldPath } from "@/lib/admin-content-schema";
 import { getAtPath } from "@/lib/admin-path";
 import { TextFieldEditor } from "./TextFieldEditor";
+import { ImageFieldEditor } from "./ImageFieldEditor";
 
 type Props = {
   section: ContentSection;
@@ -29,12 +30,6 @@ function valueToString(v: unknown): string {
   return "";
 }
 
-function readImagePath(value: unknown, imageField: string | undefined): string | null {
-  if (!imageField) return null;
-  const raw = getAtPath(value, imageField);
-  if (typeof raw !== "string" || !raw) return null;
-  return raw;
-}
 
 /**
  * Renders one section. Supports two modes:
@@ -76,7 +71,8 @@ export function SectionCard({
     [isArrayItem, itemIndex, section.source.anchor],
   );
 
-  const imagePath = readImagePath(itemValue, section.imageField);
+  // Image preview at the top is now handled by ImageFieldEditor inline
+  // in the field list, so we no longer pre-render it here.
   const title = titleOverride ?? section.label;
 
   return (
@@ -101,23 +97,11 @@ export function SectionCard({
       </button>
       {open && (
         <div className="em-section-body">
-          {imagePath && (
-            <div className="em-section-image">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={imagePath} alt={`Foto van ${title}`} />
-              <div className="em-section-image-meta">
-                <span>{imagePath}</span>
-                <span>foto-editor in stap 5</span>
-              </div>
-            </div>
-          )}
           {itemValue === null || itemValue === undefined ? (
             <p className="em-section-empty">Geen data voor deze sectie.</p>
           ) : (
             <FieldList
-              fields={section.fields.filter(
-                (f) => !section.imageField || f.key !== section.imageField,
-              )}
+              fields={section.fields}
               data={itemValue}
               buildPath={buildFieldPath}
               source={section.source}
@@ -147,13 +131,26 @@ function FieldList({
     <div className="em-field-list">
       {fields.map((field) => {
         const raw = getAtPath(data, field.key);
+        const valueStr = valueToString(raw);
+        if (field.type === "image") {
+          return (
+            <ImageFieldEditor
+              key={field.key}
+              field={field}
+              source={source}
+              fullPath={buildPath(field.key)}
+              initialValue={valueStr}
+              onSaved={onSaved}
+            />
+          );
+        }
         return (
           <TextFieldEditor
             key={field.key}
             field={field}
             source={source}
             fullPath={buildPath(field.key)}
-            initialValue={valueToString(raw)}
+            initialValue={valueStr}
             onSaved={onSaved}
           />
         );

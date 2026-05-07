@@ -6,6 +6,83 @@ beslissingen die voor latere stappen relevant zijn.
 
 ---
 
+## Stap 3 — Array CRUD, foto editor, AI Change Request, git history
+
+**Datum:** 7 mei 2026
+**Commit:** zie `git log --grep "admin: stap 3"`
+
+### Wat er staat
+
+**Server**
+
+| Bestand | Rol |
+|---|---|
+| `src/app/api/admin/history/route.ts` | GET — leest commits van GitHub, filtert default op `admin:` prefix. |
+| `src/app/api/admin/upload/route.ts` | POST multipart — sharp normaliseert naar WebP (max 1920px, target ≤300KB), schrijft via GitHub Contents API. |
+| `src/app/api/admin/kie/route.ts` | POST — server-side kie.ai (nano-banana-2) generatie + polling, optionele `image_input` referentie, geeft base64 terug. `maxDuration: 130`. |
+| `src/app/api/admin/ai/route.ts` | POST — laadt alle content van GitHub (parallel), bouwt platte snapshot van bewerkbare velden, vraagt Claude Sonnet om een JSON-antwoord met change proposals. `maxDuration: 60`. |
+| `src/lib/admin-github.ts` | Uitgebreid met `tryGetSha`, `Buffer` support in `writeFile`, optionele `sha` voor nieuwe bestanden. |
+
+**UI**
+
+| Bestand | Rol |
+|---|---|
+| `src/app/admin/hooks/useArrayMutate.ts` | Add/remove/move/duplicate over een array. Bouwt nieuwe array client-side, schrijft via `/api/admin/field`. |
+| `src/app/admin/components/ArrayEditor.tsx` | Vervangt de inline ArraySection van stap 2. Toolbar met `+ X toevoegen`, item-cards met up/down/dupliceer/verwijder knoppen. |
+| `src/app/admin/components/ImageFieldEditor.tsx` | Preview + drag-drop + upload + AI-modal (kie.ai edit/new met side-by-side compare). Cache-bust via `?v=` als bestand op zelfde URL wordt vervangen. |
+| `src/app/admin/components/AiChangePanel.tsx` | De killer feature. Textarea + suggestion chips → AI analyse → diff cards (oud / nieuw, rood / groen) → checkboxes → apply. Sequentiële commits. |
+| `src/app/admin/components/RecentChanges.tsx` | Compacte tijdlijn (gebruikt door dashboard én HistoryView). Relatieve tijd, korte SHA → klikbaar naar GitHub. |
+| `src/app/admin/views/HistoryView.tsx` | Volledige `/admin` Wijzigingen-pagina met "alle commits" toggle. |
+| `src/app/admin/components/SectionCard.tsx` | Image-veld dispatch in FieldList — `image` type → ImageFieldEditor, anders TextFieldEditor. |
+| `src/app/admin/views/PageContentView.tsx` | Gebruikt ArrayEditor ipv inline ArraySection. |
+| `src/app/admin/views/DashboardView.tsx` | Refactor: AI panel + RecentChanges als losse componenten. |
+| `src/app/admin/AdminShell.tsx` | "Wijzigingen" sidebar-entry naast Dashboard, history view routing. |
+| `src/app/admin/admin.css` | +600 regels: array-editor controls, image preview/drop, AI diff cards, timeline, modal-wide variant, spinner. |
+
+### Architecturale keuzes
+
+1. **Geen drag-and-drop reorder.** Vervangen door up/down icon buttons. Beter toegankelijk (toetsenbord + screen-reader), simpeler te implementeren, en op admin-volume (5-20 items) niet trager. DnD blijft een mogelijke upgrade voor later.
+2. **TS array CRUD uitgesteld.** Voor JSON arrays werkt alles full CRUD. Voor TS arrays (bv. `homePage.team.members`, `hetSpelPage.sections`) is de "+ Toevoegen" knop uitgeschakeld met een tooltip — bewerken van bestaande items inline werkt wel. Toevoegen aan TS-arrays vereist serialisatie van JS-objecten naar TS source — dat is een aparte runtime + risk-zone die we in stap 4 of later doen.
+3. **Sequentiële commits voor AI apply.** Spec noemde batch mode + true single-commit-per-AI-request. Dat vereist de GitHub git-data API (blobs/tree/commit/ref). Voor nu past de UI elke goedgekeurde wijziging als losse commit toe — het is begrijpelijker (één regel in de history per change) en voor 1-3 wijzigingen per AI-request niet meetbaar trager. Echte batch via git-data API verplaatst naar stap 4.
+4. **Cache-bust via `?v=` query.** Als het uploadpad gelijk blijft (replace), updaten we de `<img>` query parameter zodat de admin-preview direct nieuw beeld ziet. De live site krijgt de nieuwe bytes via Netlify's deploy ~60s later. Permanent versie-stamp op de bestandsnaam (zoals `-v6.webp` op de hero) komt in een later refactor.
+5. **Sharp loopt uit Node-runtime.** Werkt out-of-the-box op Netlify omdat ze sharp in hun Next.js plugin meeleveren; lokaal werkt het via `npm install`. WebP target = 300KB met dynamische quality-stappen 82→58.
+6. **AI snapshot is volledig.** We sturen het hele content-overzicht (alle velden + huidige waarden) mee bij elke AI-call. ~5-10K input tokens per request, ~$0.01 op Sonnet. Caching kan in stap 4 via Anthropic prompt caching.
+
+### Beperkingen / vooruitschuifjes
+
+- **Batch mode (één commit voor meerdere wijzigingen)** → stap 4. Vereist GitHub git-data API.
+- **TS array CRUD** → stap 4 (toevoegen/verwijderen items in `homePage.team.members`, `hetSpelPage.sections`).
+- **Drag-and-drop reorder** → niet kritiek; up/down knoppen werken.
+- **Foto crop / specifieke aspect-ratio toolbox** → stap 5.
+- **History "terugdraaien" knop** → stap 4 (vereist git revert via API + sha-resolve).
+- **Anthropic prompt caching** → stap 4. Bespaart ~80% kosten op herhaalde AI-calls.
+- **`ANTHROPIC_API_KEY` placeholder leeg** in `.env.local`. Gebruiker moet eigen key invullen voor AI feature.
+
+### Tests
+
+| Categorie | Resultaat |
+|---|---|
+| `npx tsc --noEmit` | 0 errors |
+| `npm run build` | ✓ 64/64 pages, 9 admin API routes (/ai, /field, /github, /history, /kie, /login, /logout, /section, /upload) |
+| Browser smoke: Wijzigingen sidebar entry zichtbaar | ✓ |
+| HistoryView toont 2 admin-commits (stap 1, stap 2) via GitHub API | ✓ |
+| Reviews pagina: 4 item-cards met `+ Review toevoegen` toolbar + 4 actie-knoppen per item | ✓ |
+| Homepage hero: ImageFieldEditor preview + 3 acties (Upload / AI aanpassen / AI nieuwe foto) | ✓ |
+| AI panel zichtbaar met textarea + 5 suggestion chips | ✓ |
+| Geen visuele leak naar publieke site (al getest in stap 1, blijft zo) | ✓ |
+
+### Beveiligings-/UX-keuzes
+
+- Verwijder-knoppen openen verplicht een ConfirmDialog met item-titel.
+- Upload route weigert niet-image bestanden + bestanden >30MB.
+- kie.ai requires min. 12 chars in prompt — voorkomt accidentele lege requests die een API-call kosten.
+- AI-route geeft duidelijke 503 terug als `ANTHROPIC_API_KEY` ontbreekt, met instructies in `error`.
+- Per change in AI panel: checkbox (default aan) zodat de gebruiker selectief kan goedkeuren.
+- Modal sluit op Escape én op klik buiten (consistent met ConfirmDialog).
+- Drag-over zone op image preview krijgt accent-border + tint feedback.
+
+---
+
 ## Stap 2 — Content schema, GitHub API, text editors, dashboard
 
 **Datum:** 7 mei 2026

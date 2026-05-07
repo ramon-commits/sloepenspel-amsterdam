@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
 import { ADMIN_PAGES } from "@/lib/admin-content-schema";
-import { useToast } from "../components/Toast";
+import { AiChangePanel } from "../components/AiChangePanel";
+import { RecentChanges } from "../components/RecentChanges";
 
 type Props = {
   onNavigate: (pageId: string) => void;
@@ -12,34 +12,6 @@ type Props = {
     files: number;
   };
 };
-
-const SUGGESTIONS: Array<{ label: string; template: string; pageId: string }> = [
-  {
-    label: "Wijzig hero tekst",
-    template: "Verander de hero headline van de homepage naar: ",
-    pageId: "homepage",
-  },
-  {
-    label: "Voeg review toe",
-    template: "Voeg een nieuwe review toe van …",
-    pageId: "reviews",
-  },
-  {
-    label: "Nieuwe FAQ vraag",
-    template: "Voeg een FAQ-vraag toe: ",
-    pageId: "faq",
-  },
-  {
-    label: "Update prijs",
-    template: "Werk de prijs bij naar: ",
-    pageId: "pricing",
-  },
-  {
-    label: "Pas een foto aan",
-    template: "Vervang de foto van de hero door …",
-    pageId: "homepage",
-  },
-];
 
 const QUICK_ACTIONS: Array<{
   pageId: string;
@@ -74,17 +46,6 @@ const QUICK_ACTIONS: Array<{
 ];
 
 export function DashboardView({ onNavigate, counts }: Props) {
-  const toast = useToast();
-  const [aiInput, setAiInput] = useState("");
-
-  const onSubmit = (e: FormEvent) => {
-    e.preventDefault();
-    if (!aiInput.trim()) return;
-    toast.info(
-      "AI assistent komt in stap 4. Voor nu kun je de wijziging zelf in een sectie maken.",
-    );
-  };
-
   return (
     <div className="em-fade-in">
       <header className="em-page-header">
@@ -106,47 +67,7 @@ export function DashboardView({ onNavigate, counts }: Props) {
       </header>
 
       <div className="em-dash-grid">
-        <form className="em-ai-card" onSubmit={onSubmit}>
-          <h2>
-            <span aria-hidden>✨</span> AI Assistent
-          </h2>
-          <p>
-            Plak een klantverzoek of beschrijf wat je wilt aanpassen.
-            Het systeem zoekt automatisch de juiste velden, toont een
-            preview en jij keurt af of goed.
-          </p>
-          <textarea
-            className="em-input em-textarea em-ai-textarea"
-            value={aiInput}
-            onChange={(e) => setAiInput(e.target.value)}
-            placeholder="Bijv: 'Maak de hero subheadline iets korter en informeler.'"
-            rows={3}
-          />
-          <div className="em-suggestion-row">
-            {SUGGESTIONS.map((s) => (
-              <button
-                key={s.label}
-                type="button"
-                className="em-chip"
-                onClick={() => {
-                  setAiInput(s.template);
-                  onNavigate(s.pageId);
-                }}
-              >
-                {s.label}
-              </button>
-            ))}
-          </div>
-          <div style={{ display: "flex", justifyContent: "flex-end" }}>
-            <button
-              type="submit"
-              className="em-btn em-btn-primary"
-              disabled={!aiInput.trim()}
-            >
-              Analyseer →
-            </button>
-          </div>
-        </form>
+        <AiChangePanel />
 
         <div className="em-status-card">
           <span className="em-status-dot" aria-hidden />
@@ -191,26 +112,11 @@ export function DashboardView({ onNavigate, counts }: Props) {
           </div>
         </div>
 
-        <div>
-          <div
-            className="em-content-toolbar"
-            style={{ marginTop: 8, marginBottom: 12 }}
-          >
-            <strong style={{ color: "var(--color-text)" }}>
-              Recente wijzigingen
-            </strong>
-            <span>Volledige tijdlijn volgt in stap 4</span>
-          </div>
-          <div className="em-empty">
-            <div className="em-empty-icon" aria-hidden>
-              ○
-            </div>
-            <div className="em-empty-title">Nog geen wijzigingen vandaag</div>
-            <div className="em-empty-sub">
-              Zodra je iets opslaat verschijnt het hier met tijdstempel.
-            </div>
-          </div>
-        </div>
+        <RecentChanges
+          limit={6}
+          title="Recente wijzigingen"
+          onSeeAll={() => onNavigate("history")}
+        />
       </div>
       <DashboardFooterMeta />
     </div>
