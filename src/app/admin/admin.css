@@ -57,6 +57,11 @@
   -moz-osx-font-smoothing: grayscale;
   font-size: 14px;
   line-height: 1.5;
+  /* The whole admin renders at 90% so dense Linear/Notion-style screens
+   * get more breathing room without resizing every component. `zoom`
+   * also reflows layout (unlike transform: scale), so fixed elements
+   * (modals, toasts, hamburger) stay correctly anchored. */
+  zoom: 0.9;
 }
 
 /* ---------- Layout ---------- */
@@ -727,7 +732,7 @@
   max-width: 420px;
   width: 100%;
   padding: 28px;
-  animation: em-fadeUp 220ms cubic-bezier(0.16, 1, 0.3, 1);
+  animation: em-modalIn 200ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 .em-modal-title {
   font-size: 16px;
@@ -750,7 +755,7 @@
 /* ---------- Page transition ---------- */
 
 .em-fade-in {
-  animation: em-fadeIn 160ms ease-out;
+  animation: em-fadeIn 200ms ease-out;
 }
 
 /* ---------- Animations ---------- */
@@ -771,6 +776,16 @@
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+@keyframes em-modalIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
   }
 }
 @keyframes em-slideInRight {
@@ -837,7 +852,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  padding: 16px 20px;
+  padding: 14px 20px;
   background: transparent;
   border: 0;
   width: 100%;
@@ -845,12 +860,16 @@
   text-align: left;
   font-family: inherit;
   color: inherit;
-  transition: background var(--transition-fast);
+  transition: background var(--transition-fast),
+    border-color var(--transition-fast);
 }
 .em-section-header:hover {
   background: var(--color-surface-2);
 }
 .em-section-header[aria-expanded="true"] {
+  /* Linear/Notion-style title bar when the section is open: tinted bg
+   * makes the title row feel like a sectie-kop in the design system. */
+  background: #f9fafb;
   border-bottom: 1px solid var(--color-border);
 }
 
@@ -878,11 +897,11 @@
 }
 
 .em-section-body {
-  padding: 8px 20px 20px;
-  animation: em-fadeIn 160ms ease-out;
+  padding: 18px 24px 22px;
+  animation: em-fadeIn 200ms ease-out;
 }
 .em-section-empty {
-  padding: 20px;
+  padding: 20px 24px;
   font-size: 13px;
   color: var(--color-text-muted);
 }
