@@ -2,6 +2,9 @@
   command = "npm run build"
   publish = ".next"
 
+[build.environment]
+  SECRETS_SCAN_OMIT_PATHS = "LOGBOEK.md"
+
 [[plugins]]
   package = "@netlify/plugin-nextjs"
 

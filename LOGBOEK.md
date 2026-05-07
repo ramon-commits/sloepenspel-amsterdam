@@ -287,7 +287,7 @@ Een echte productie-save (= GitHub commit + Netlify deploy) is bewust niét uitg
 |---|---|---|
 | 1 | `/admin` zonder cookie → redirect naar `/admin/login` | ✓ |
 | 2 | Foute wachtwoord → "Wachtwoord onjuist" + rode rand + shake | ✓ |
-| 3 | `sloepenspel2026` → `/admin`, sidebar met 20 items, counts (Reviews 4, FAQ 5, Restaurants 17, Locaties 6, Blog 7, Team 3) | ✓ |
+| 3 | `[ADMIN_PASSWORD]` → `/admin`, sidebar met 20 items, counts (Reviews 4, FAQ 5, Restaurants 17, Locaties 6, Blog 7, Team 3) | ✓ |
 | 4 | Sidebar item klik → active state + page title update + fade-in | ✓ |
 | 5 | Logout → redirect naar `/admin/login`, shell weg | ✓ |
 | 6 | Public homepage `/` → geen `.em-admin`, geen `.em-shell`, public title intact | ✓ |
