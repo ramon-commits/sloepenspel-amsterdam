@@ -3,6 +3,7 @@
 import { useCallback, useState } from "react";
 import type { ContentSource } from "@/lib/admin-content-schema";
 import { useToast } from "../components/Toast";
+import { useConfirm } from "../components/ConfirmDialog";
 
 type Direction = "up" | "down";
 
@@ -67,6 +68,7 @@ export function useArrayMutate({
   onSaved,
 }: Args) {
   const toast = useToast();
+  const confirm = useConfirm();
   const [busy, setBusy] = useState<null | "add" | "remove" | "move" | "duplicate">(
     null,
   );
@@ -111,16 +113,23 @@ export function useArrayMutate({
   );
 
   const add = useCallback(async (): Promise<boolean> => {
+    const ok = await confirm({
+      title: `Nieuwe ${itemLabel.toLowerCase()} toevoegen?`,
+      description: `Een leeg ${itemLabel.toLowerCase()}-item wordt onderaan de lijst aangemaakt en direct via een commit naar GitHub gepusht. Daarna kun je de velden invullen.`,
+      confirmLabel: `Voeg ${itemLabel.toLowerCase()} toe`,
+      cancelLabel: "Annuleer",
+    });
+    if (!ok) return false;
     const tmpl = blankFromShape(items);
     const next = [...items, tmpl];
-    const ok = await writeArray(
+    const written = await writeArray(
       next,
       "add",
       `admin: ${itemLabel.toLowerCase()} toegevoegd`,
     );
-    if (ok) toast.success(`${itemLabel} toegevoegd. Vul de velden in en sla op.`);
-    return ok;
-  }, [items, itemLabel, writeArray, toast]);
+    if (written) toast.success(`${itemLabel} toegevoegd. Vul de velden in en sla op.`);
+    return written;
+  }, [items, itemLabel, writeArray, toast, confirm]);
 
   const duplicate = useCallback(
     async (index: number): Promise<boolean> => {

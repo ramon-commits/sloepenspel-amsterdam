@@ -14,9 +14,18 @@ import {
 export type ConfirmOptions = {
   title: string;
   description?: string;
+  /**
+   * Optional rich body. Renders below the title and overrides
+   * `description`. Used by useConfirmDiff to show old/new diff cards.
+   */
+  body?: ReactNode;
   confirmLabel?: string;
   cancelLabel?: string;
   destructive?: boolean;
+  /** When true, the primary button uses the success-green color. */
+  success?: boolean;
+  /** Render in a wider modal (e.g. for diff bodies). */
+  wide?: boolean;
 };
 
 type Pending = {
@@ -116,7 +125,7 @@ export function ConfirmProvider({ children }: { children: ReactNode }) {
         >
           <div
             ref={dialogRef}
-            className="em-modal"
+            className={`em-modal${pending.options.wide ? " em-modal-wide" : ""}`}
             role="dialog"
             aria-modal="true"
             aria-labelledby="em-modal-title"
@@ -128,10 +137,14 @@ export function ConfirmProvider({ children }: { children: ReactNode }) {
             <div id="em-modal-title" className="em-modal-title">
               {pending.options.title}
             </div>
-            {pending.options.description && (
-              <div id="em-modal-desc" className="em-modal-desc">
-                {pending.options.description}
-              </div>
+            {pending.options.body ? (
+              <div className="em-modal-body">{pending.options.body}</div>
+            ) : (
+              pending.options.description && (
+                <div id="em-modal-desc" className="em-modal-desc">
+                  {pending.options.description}
+                </div>
+              )
             )}
             <div className="em-modal-actions">
               <button
@@ -146,7 +159,9 @@ export function ConfirmProvider({ children }: { children: ReactNode }) {
                 className={
                   pending.options.destructive
                     ? "em-btn em-btn-danger"
-                    : "em-btn em-btn-primary"
+                    : pending.options.success
+                      ? "em-btn em-btn-success"
+                      : "em-btn em-btn-primary"
                 }
                 onClick={() => close(true)}
                 autoFocus

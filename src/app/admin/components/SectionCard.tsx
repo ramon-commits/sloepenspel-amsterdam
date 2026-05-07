@@ -105,6 +105,7 @@ export function SectionCard({
               data={itemValue}
               buildPath={buildFieldPath}
               source={section.source}
+              contextPath={title}
               onSaved={onSaved}
             />
           )}
@@ -119,12 +120,14 @@ function FieldList({
   data,
   buildPath,
   source,
+  contextPath,
   onSaved,
 }: {
   fields: ContentField[];
   data: unknown;
   buildPath: (key: string) => string;
   source: ContentSection["source"];
+  contextPath?: string;
   onSaved?: () => void;
 }) {
   return (
@@ -151,6 +154,7 @@ function FieldList({
             source={source}
             fullPath={buildPath(field.key)}
             initialValue={valueStr}
+            contextPath={contextPath}
             onSaved={onSaved}
           />
         );

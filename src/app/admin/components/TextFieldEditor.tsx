@@ -13,6 +13,8 @@ import { countWords } from "@/lib/admin-path";
 import { useFieldSave } from "../hooks/useFieldSave";
 import { useToast } from "./Toast";
 import { useDirtyTracker } from "./UnsavedChanges";
+import { useConfirmDiff } from "./ConfirmDiff";
+import { AiWriteAssistant } from "./AiWriteAssistant";
 
 type Props = {
   field: ContentField;
@@ -24,9 +26,12 @@ type Props = {
   initialValue: string;
   /** Notify parent when a save commits — used to refresh section data. */
   onSaved?: (newValue: string) => void;
+  /** Optional breadcrumb shown in the save-confirm modal, e.g. "Homepage › Hero". */
+  contextPath?: string;
 };
 
 const SAVED_FLASH_MS = 2400;
+const AI_FLASH_MS = 2200;
 
 function isEmDashy(value: string): boolean {
   return /[—–]/.test(value);
@@ -38,14 +43,18 @@ export function TextFieldEditor({
   fullPath,
   initialValue,
   onSaved,
+  contextPath,
 }: Props) {
   const toast = useToast();
   const { save, status, reset } = useFieldSave();
+  const confirmDiff = useConfirmDiff();
 
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState(initialValue);
   const [committedValue, setCommittedValue] = useState(initialValue);
   const [showSaved, setShowSaved] = useState(false);
+  const [aiOpen, setAiOpen] = useState(false);
+  const [aiFlash, setAiFlash] = useState(false);
   const inputRef = useRef<HTMLInputElement | HTMLTextAreaElement | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
@@ -84,11 +93,45 @@ export function TextFieldEditor({
     });
   }, [editing, committedValue, reset]);
 
+  // Open the AI panel — also flips the field into edit mode so the
+  // user immediately sees the textarea where the AI text will land.
+  const startAi = useCallback(() => {
+    if (!editing) {
+      setEditing(true);
+      setDraft(committedValue);
+      reset();
+      setShowSaved(false);
+    }
+    setAiOpen(true);
+  }, [editing, committedValue, reset]);
+
   const cancelEdit = useCallback(() => {
     setEditing(false);
+    setAiOpen(false);
     setDraft(committedValue);
     reset();
   }, [committedValue, reset]);
+
+  // When the AI returns text, drop it straight into the draft, close
+  // the panel, and flash the textarea green so the user sees AI did
+  // something. The user can still edit before saving.
+  const onAiResult = useCallback(
+    (text: string) => {
+      setDraft(text);
+      setAiOpen(false);
+      setAiFlash(true);
+      queueMicrotask(() => {
+        const el = textareaRef.current ?? inputRef.current;
+        el?.focus();
+        if (el && "setSelectionRange" in el) {
+          const len = el.value.length;
+          el.setSelectionRange(len, len);
+        }
+      });
+      setTimeout(() => setAiFlash(false), AI_FLASH_MS);
+    },
+    [],
+  );
 
   const commitSave = useCallback(async () => {
     if (saving) return;
@@ -106,6 +149,17 @@ export function TextFieldEditor({
       }
       return;
     }
+
+    // Always show a diff confirmation before committing to GitHub.
+    // The user sees exactly what's about to land on the live site.
+    const ok = await confirmDiff({
+      fieldLabel: field.label,
+      contextPath,
+      oldValue: committedValue,
+      newValue: draft,
+    });
+    if (!ok) return;
+
     const trimmed = draft;
     const result = await save({
       source,
@@ -116,6 +170,7 @@ export function TextFieldEditor({
     if (result.ok) {
       setCommittedValue(trimmed);
       setEditing(false);
+      setAiOpen(false);
       setShowSaved(true);
       onSaved?.(trimmed);
       toast.success(`${field.label} opgeslagen.`);
@@ -139,6 +194,9 @@ export function TextFieldEditor({
     save,
     toast,
     wordCount,
+    committedValue,
+    confirmDiff,
+    contextPath,
   ]);
 
   const onKeyDown = useCallback(
@@ -192,11 +250,19 @@ export function TextFieldEditor({
 
       {editing ? (
         <div className="em-field-edit">
+          <AiWriteAssistant
+            open={aiOpen}
+            fieldLabel={field.label}
+            currentValue={draft}
+            maxWords={field.maxWords ?? null}
+            onResult={onAiResult}
+            onClose={() => setAiOpen(false)}
+          />
           {field.type === "textarea" ? (
             <textarea
               ref={textareaRef}
               id={`field-${fullPath}`}
-              className={`em-input em-textarea${hasError ? " is-error" : ""}`}
+              className={`em-input em-textarea${hasError ? " is-error" : ""}${aiFlash ? " is-ai-flash" : ""}`}
               value={draft}
               onChange={(e) => setDraft(e.target.value)}
               onKeyDown={onKeyDown}
@@ -220,7 +286,7 @@ export function TextFieldEditor({
                       ? "tel"
                       : "text"
               }
-              className={`em-input${hasError ? " is-error" : ""}`}
+              className={`em-input${hasError ? " is-error" : ""}${aiFlash ? " is-ai-flash" : ""}`}
               value={draft}
               onChange={(e) => setDraft(e.target.value)}
               onKeyDown={onKeyDown}
@@ -238,6 +304,18 @@ export function TextFieldEditor({
             <p className="em-field-help">{field.helpText}</p>
           )}
           <div className="em-field-actions">
+            {!aiOpen && (
+              <button
+                type="button"
+                className="em-btn em-btn-ghost em-btn-ai"
+                onClick={() => setAiOpen(true)}
+                disabled={saving}
+                title="Vraag AI om de tekst te herschrijven"
+              >
+                <span className="em-btn-ai-icon" aria-hidden>✨</span>
+                AI Schrijfassistent
+              </button>
+            )}
             <button
               type="button"
               className="em-btn em-btn-secondary"
@@ -265,23 +343,34 @@ export function TextFieldEditor({
           </div>
         </div>
       ) : (
-        <button
-          type="button"
-          className="em-field-display"
-          onClick={startEdit}
-          aria-label={`Bewerk ${field.label}`}
-        >
-          <span
-            className={`em-field-value${committedValue ? "" : " is-empty"}`}
+        <div className="em-field-display-row">
+          <button
+            type="button"
+            className="em-field-display"
+            onClick={startEdit}
+            aria-label={`Bewerk ${field.label}`}
           >
-            {committedValue || (
-              <span className="em-field-empty">Geen waarde — klik om te bewerken</span>
-            )}
-          </span>
-          <span className="em-field-edit-icon" aria-hidden>
-            ✎
-          </span>
-        </button>
+            <span
+              className={`em-field-value${committedValue ? "" : " is-empty"}`}
+            >
+              {committedValue || (
+                <span className="em-field-empty">Geen waarde — klik om te bewerken</span>
+              )}
+            </span>
+            <span className="em-field-edit-icon" aria-hidden>
+              ✎
+            </span>
+          </button>
+          <button
+            type="button"
+            className="em-sparkle-btn"
+            onClick={startAi}
+            aria-label={`AI Schrijfassistent voor ${field.label}`}
+            title="AI Schrijfassistent — laat Claude een variant schrijven"
+          >
+            <span aria-hidden>✨</span>
+          </button>
+        </div>
       )}
       {field.helpText && !editing && (
         <p className="em-field-help is-static">{field.helpText}</p>
