@@ -4,7 +4,7 @@ export const homePage = {
   hero: {
     headline: "Hét bedrijfsuitje van Amsterdam.",
     subheadline:
-      "Een interactief spel op eigen sloepen door de grachten. Jullie team vaart, speelt en ontdekt het échte Amsterdam, in één middag.",
+      "Jullie team vaart op eigen sloepen door de grachten, speelt interactieve opdrachten en ontdekt het échte Amsterdam. Alles in één onvergetelijke middag.",
     primaryCta: "Vraag een offerte aan",
     primaryHref: "/contact#formulier",
     secondaryCta: "Hoe werkt het",
