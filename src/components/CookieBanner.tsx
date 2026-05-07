@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const STORAGE_KEY = "cookie-consent";
 const EVENT_NAME = "consentchange";
@@ -9,9 +10,12 @@ const EVENT_NAME = "consentchange";
 export type ConsentValue = "accepted" | "necessary";
 
 export function CookieBanner() {
+  const pathname = usePathname();
   const [visible, setVisible] = useState(false);
+  const isAdmin = pathname?.startsWith("/admin") ?? false;
 
   useEffect(() => {
+    if (isAdmin) return;
     try {
       const stored = window.localStorage.getItem(STORAGE_KEY);
       if (stored !== "accepted" && stored !== "necessary") {
@@ -20,7 +24,7 @@ export function CookieBanner() {
     } catch {
       setVisible(true);
     }
-  }, []);
+  }, [isAdmin]);
 
   function choose(value: ConsentValue) {
     try {
@@ -32,7 +36,7 @@ export function CookieBanner() {
     setVisible(false);
   }
 
-  if (!visible) return null;
+  if (isAdmin || !visible) return null;
 
   return (
     <div

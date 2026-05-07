@@ -3,13 +3,16 @@
 import { useEffect, useState } from "react";
 import Script from "next/script";
 import { Analytics } from "@vercel/analytics/next";
+import { usePathname } from "next/navigation";
 
 const STORAGE_KEY = "cookie-consent";
 const EVENT_NAME = "consentchange";
 
 export function ConsentAnalytics() {
+  const pathname = usePathname();
   const [accepted, setAccepted] = useState(false);
   const gaId = process.env.NEXT_PUBLIC_GA_ID;
+  const isAdmin = pathname?.startsWith("/admin") ?? false;
 
   useEffect(() => {
     function read() {
@@ -28,7 +31,7 @@ export function ConsentAnalytics() {
     return () => window.removeEventListener(EVENT_NAME, onChange);
   }, []);
 
-  if (!accepted) return null;
+  if (isAdmin || !accepted) return null;
 
   return (
     <>
