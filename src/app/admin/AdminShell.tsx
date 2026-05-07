@@ -7,6 +7,14 @@ import {
   useState,
 } from "react";
 import { useRouter } from "next/navigation";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faArrowRightFromBracket,
+  faArrowUpFromBracket,
+  faArrowUpRightFromSquare,
+  faBars,
+  faXmark,
+} from "@fortawesome/free-solid-svg-icons";
 import { ADMIN_PAGES, getPageById } from "@/lib/admin-content-schema";
 import { useToast } from "./components/Toast";
 import { useConfirm } from "./components/ConfirmDialog";
@@ -151,7 +159,7 @@ export function AdminShell({ counts }: { counts: SidebarCounts }) {
         aria-expanded={sidebarOpen}
         onClick={() => setSidebarOpen((v) => !v)}
       >
-        <span aria-hidden>{sidebarOpen ? "✕" : "☰"}</span>
+        <FontAwesomeIcon icon={sidebarOpen ? faXmark : faBars} aria-hidden />
       </button>
       {sidebarOpen && (
         <button
@@ -233,7 +241,7 @@ export function AdminShell({ counts }: { counts: SidebarCounts }) {
             onClick={handlePublish}
             className="em-publish-btn"
           >
-            <span aria-hidden>↑</span> Publiceer
+            <FontAwesomeIcon icon={faArrowUpFromBracket} aria-hidden /> Publiceer
           </button>
           <a
             href="/"
@@ -241,7 +249,7 @@ export function AdminShell({ counts }: { counts: SidebarCounts }) {
             rel="noopener noreferrer"
             className="em-view-link"
           >
-            Bekijk site <span aria-hidden>↗</span>
+            Bekijk site <FontAwesomeIcon icon={faArrowUpRightFromSquare} aria-hidden />
           </a>
           <div className="em-user-block">
             <div className="em-user-avatar" aria-hidden>
@@ -259,7 +267,7 @@ export function AdminShell({ counts }: { counts: SidebarCounts }) {
               disabled={loggingOut}
               title="Uitloggen"
             >
-              →
+              <FontAwesomeIcon icon={faArrowRightFromBracket} aria-hidden />
             </button>
           </div>
         </div>

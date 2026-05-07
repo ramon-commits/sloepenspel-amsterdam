@@ -1,6 +1,12 @@
 "use client";
 
 import { useCallback, useState, type FormEvent } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faArrowRight,
+  faCheck,
+  faWandMagicSparkles,
+} from "@fortawesome/free-solid-svg-icons";
 import type { FileType } from "@/lib/admin-file-parsers";
 import { useToast } from "./Toast";
 import { useConfirm } from "./ConfirmDialog";
@@ -193,7 +199,7 @@ export function AiChangePanel({ onAfterApply }: { onAfterApply?: () => void }) {
         toast.info("Geen verandering nodig — content was al up-to-date.");
       } else {
         toast.success(
-          `✓ ${toApply.length} wijziging${toApply.length === 1 ? "" : "en"} in 1 commit doorgevoerd.`,
+          `${toApply.length} wijziging${toApply.length === 1 ? "" : "en"} in 1 commit doorgevoerd.`,
         );
       }
       setInput("");
@@ -215,7 +221,7 @@ export function AiChangePanel({ onAfterApply }: { onAfterApply?: () => void }) {
   return (
     <form className="em-ai-card" onSubmit={analyse}>
       <h2>
-        <span aria-hidden>✨</span> AI Assistent
+        <FontAwesomeIcon icon={faWandMagicSparkles} aria-hidden /> AI Assistent
       </h2>
       <p>
         Plak een klantverzoek of beschrijf wat je wilt aanpassen. De
@@ -256,7 +262,13 @@ export function AiChangePanel({ onAfterApply }: { onAfterApply?: () => void }) {
           className={`em-btn em-btn-primary${phase.kind === "loading" ? " em-btn-loading" : ""}`}
           disabled={!input.trim() || phase.kind === "loading" || phase.kind === "applying"}
         >
-          {phase.kind === "loading" ? "Analyseren…" : "Analyseer →"}
+          {phase.kind === "loading" ? (
+            "Analyseren…"
+          ) : (
+            <>
+              Analyseer <FontAwesomeIcon icon={faArrowRight} aria-hidden />
+            </>
+          )}
         </button>
       </div>
 
@@ -297,7 +309,7 @@ export function AiChangePanel({ onAfterApply }: { onAfterApply?: () => void }) {
                 className="em-btn em-btn-primary"
                 onClick={() => void apply()}
               >
-                ✓ Pas geselecteerde wijzigingen toe
+                <FontAwesomeIcon icon={faCheck} aria-hidden /> Pas geselecteerde wijzigingen toe
               </button>
             </div>
           )}

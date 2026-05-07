@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowRight, faClockRotateLeft } from "@fortawesome/free-solid-svg-icons";
 import { useToast } from "./Toast";
 import { useConfirm } from "./ConfirmDialog";
 
@@ -139,7 +141,7 @@ export function RecentChanges({
             ? ` (${data.skipped.length} bestand${data.skipped.length === 1 ? "" : "en"} overgeslagen)`
             : "";
         toast.success(
-          `✓ Teruggedraaid in 1 commit. ${data.filesReverted.length} bestand${data.filesReverted.length === 1 ? "" : "en"} hersteld${skippedNote}.`,
+          `Teruggedraaid in 1 commit. ${data.filesReverted.length} bestand${data.filesReverted.length === 1 ? "" : "en"} hersteld${skippedNote}.`,
         );
         setReloadKey((k) => k + 1);
       } catch (e) {
@@ -164,7 +166,7 @@ export function RecentChanges({
               className="em-link-button"
               onClick={onSeeAll}
             >
-              Bekijk alles →
+              Bekijk alles <FontAwesomeIcon icon={faArrowRight} aria-hidden />
             </button>
           )}
         </div>
@@ -181,7 +183,7 @@ export function RecentChanges({
       {state.status === "ready" && state.commits.length === 0 && (
         <div className="em-empty">
           <div className="em-empty-icon" aria-hidden>
-            ○
+            <FontAwesomeIcon icon={faClockRotateLeft} />
           </div>
           <div className="em-empty-title">Nog geen admin-wijzigingen</div>
           <div className="em-empty-sub">

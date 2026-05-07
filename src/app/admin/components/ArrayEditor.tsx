@@ -1,6 +1,15 @@
 "use client";
 
 import { useMemo } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faArrowDown,
+  faArrowUp,
+  faClone,
+  faInbox,
+  faPlus,
+  faTrashCan,
+} from "@fortawesome/free-solid-svg-icons";
 import type { ContentSection } from "@/lib/admin-content-schema";
 import { useArrayMutate } from "../hooks/useArrayMutate";
 import { useConfirm } from "./ConfirmDialog";
@@ -60,14 +69,14 @@ export function ArrayEditor({
           disabled={busy !== null}
           title={`Voeg een nieuwe ${section.arrayItemLabel ?? "item"} toe`}
         >
-          + {section.arrayItemLabel ?? "Item"} toevoegen
+          <FontAwesomeIcon icon={faPlus} aria-hidden /> {section.arrayItemLabel ?? "Item"} toevoegen
         </button>
       </div>
 
       {items.length === 0 ? (
         <div className="em-empty">
           <div className="em-empty-icon" aria-hidden>
-            ○
+            <FontAwesomeIcon icon={faInbox} />
           </div>
           <div className="em-empty-title">Nog geen {section.arrayItemLabel ?? "items"}</div>
           <div className="em-empty-sub">
@@ -153,7 +162,7 @@ function ArrayItemCard({
           onClick={onMoveUp}
           disabled={busy || index === 0}
         >
-          ↑
+          <FontAwesomeIcon icon={faArrowUp} aria-hidden />
         </button>
         <button
           type="button"
@@ -163,7 +172,7 @@ function ArrayItemCard({
           onClick={onMoveDown}
           disabled={busy || index === items.length - 1}
         >
-          ↓
+          <FontAwesomeIcon icon={faArrowDown} aria-hidden />
         </button>
         <button
           type="button"
@@ -173,7 +182,7 @@ function ArrayItemCard({
           onClick={onDuplicate}
           disabled={busy}
         >
-          ⊕
+          <FontAwesomeIcon icon={faClone} aria-hidden />
         </button>
         <button
           type="button"
@@ -183,7 +192,7 @@ function ArrayItemCard({
           onClick={onDelete}
           disabled={busy}
         >
-          ✕
+          <FontAwesomeIcon icon={faTrashCan} aria-hidden />
         </button>
       </div>
       <SectionCard

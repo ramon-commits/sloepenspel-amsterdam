@@ -8,6 +8,12 @@ import {
   useState,
   type KeyboardEvent,
 } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faCheck,
+  faPen,
+  faWandMagicSparkles,
+} from "@fortawesome/free-solid-svg-icons";
 import type { ContentField, ContentSource } from "@/lib/admin-content-schema";
 import { countWords } from "@/lib/admin-path";
 import { useFieldSave } from "../hooks/useFieldSave";
@@ -243,7 +249,7 @@ export function TextFieldEditor({
         )}
         {showSaved && (
           <span className="em-field-saved" aria-live="polite">
-            ✓ Opgeslagen
+            <FontAwesomeIcon icon={faCheck} aria-hidden /> Opgeslagen
           </span>
         )}
       </div>
@@ -312,7 +318,11 @@ export function TextFieldEditor({
                 disabled={saving}
                 title="Vraag AI om de tekst te herschrijven"
               >
-                <span className="em-btn-ai-icon" aria-hidden>✨</span>
+                <FontAwesomeIcon
+                  icon={faWandMagicSparkles}
+                  className="em-btn-ai-icon"
+                  aria-hidden
+                />
                 AI Schrijfassistent
               </button>
             )}
@@ -358,7 +368,7 @@ export function TextFieldEditor({
               )}
             </span>
             <span className="em-field-edit-icon" aria-hidden>
-              ✎
+              <FontAwesomeIcon icon={faPen} />
             </span>
           </button>
           <button
@@ -368,7 +378,7 @@ export function TextFieldEditor({
             aria-label={`AI Schrijfassistent voor ${field.label}`}
             title="AI Schrijfassistent — laat Claude een variant schrijven"
           >
-            <span aria-hidden>✨</span>
+            <FontAwesomeIcon icon={faWandMagicSparkles} aria-hidden />
           </button>
         </div>
       )}

@@ -7,6 +7,11 @@ import {
   useState,
   type KeyboardEvent,
 } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faWandMagicSparkles,
+  faXmark,
+} from "@fortawesome/free-solid-svg-icons";
 import { useToast } from "./Toast";
 
 /**
@@ -128,7 +133,7 @@ export function AiWriteAssistant({
     <div className="em-ai-write-panel" role="region" aria-label={`AI Schrijfassistent voor ${fieldLabel}`}>
       <div className="em-ai-write-header">
         <span className="em-ai-write-icon" aria-hidden>
-          ✨
+          <FontAwesomeIcon icon={faWandMagicSparkles} />
         </span>
         <div className="em-ai-write-titles">
           <strong className="em-ai-write-title">AI Schrijfassistent</strong>
@@ -145,7 +150,7 @@ export function AiWriteAssistant({
           aria-label="Sluit AI-paneel"
           title="Sluit (Esc)"
         >
-          ✕
+          <FontAwesomeIcon icon={faXmark} aria-hidden />
         </button>
       </div>
       <textarea

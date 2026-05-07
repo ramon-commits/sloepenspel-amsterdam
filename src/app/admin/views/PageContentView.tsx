@@ -1,5 +1,10 @@
 "use client";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faArrowUpRightFromSquare,
+  faFileLines,
+} from "@fortawesome/free-solid-svg-icons";
 import type { ContentPage, ContentSection } from "@/lib/admin-content-schema";
 import { ArrayEditor } from "../components/ArrayEditor";
 import { SectionCard } from "../components/SectionCard";
@@ -16,7 +21,7 @@ export function PageContentView({ page }: Props) {
       {page.sections.length === 0 ? (
         <div className="em-empty">
           <div className="em-empty-icon" aria-hidden>
-            ○
+            <FontAwesomeIcon icon={faFileLines} />
           </div>
           <div className="em-empty-title">Geen secties</div>
           <div className="em-empty-sub">
@@ -53,7 +58,7 @@ function PageHeader({ page }: { page: ContentPage }) {
         rel="noopener noreferrer"
         className="em-page-link"
       >
-        Bekijk live <span aria-hidden>↗</span>
+        Bekijk live <FontAwesomeIcon icon={faArrowUpRightFromSquare} aria-hidden />
       </a>
     </header>
   );

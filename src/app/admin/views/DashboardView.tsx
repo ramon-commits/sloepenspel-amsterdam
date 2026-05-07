@@ -1,5 +1,14 @@
 "use client";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faArrowUpRightFromSquare,
+  faCircleQuestion,
+  faGear,
+  faHouse,
+  faStar,
+} from "@fortawesome/free-solid-svg-icons";
+import type { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import { ADMIN_PAGES } from "@/lib/admin-content-schema";
 import { AiChangePanel } from "../components/AiChangePanel";
 import { RecentChanges } from "../components/RecentChanges";
@@ -15,31 +24,31 @@ type Props = {
 
 const QUICK_ACTIONS: Array<{
   pageId: string;
-  icon: string;
+  icon: IconDefinition;
   title: string;
   sub: string;
 }> = [
   {
     pageId: "homepage",
-    icon: "🏠",
+    icon: faHouse,
     title: "Bewerk homepage",
     sub: "Hero, USPs, tijdlijn, CTAs.",
   },
   {
     pageId: "reviews",
-    icon: "★",
+    icon: faStar,
     title: "Reviews beheren",
     sub: "Aanpassen of nieuwe toevoegen.",
   },
   {
     pageId: "faq",
-    icon: "?",
+    icon: faCircleQuestion,
     title: "FAQ aanpassen",
     sub: "Vragen en antwoorden bewerken.",
   },
   {
     pageId: "config",
-    icon: "⚙",
+    icon: faGear,
     title: "Site-instellingen",
     sub: "Telefoon, e-mail, adres.",
   },
@@ -62,7 +71,7 @@ export function DashboardView({ onNavigate, counts }: Props) {
           rel="noopener noreferrer"
           className="em-page-link"
         >
-          Bekijk site <span aria-hidden>↗</span>
+          Bekijk site <FontAwesomeIcon icon={faArrowUpRightFromSquare} aria-hidden />
         </a>
       </header>
 
@@ -103,7 +112,7 @@ export function DashboardView({ onNavigate, counts }: Props) {
                 onClick={() => onNavigate(action.pageId)}
               >
                 <span className="em-quick-card-icon" aria-hidden>
-                  {action.icon}
+                  <FontAwesomeIcon icon={action.icon} />
                 </span>
                 <span className="em-quick-card-title">{action.title}</span>
                 <span className="em-quick-card-sub">{action.sub}</span>

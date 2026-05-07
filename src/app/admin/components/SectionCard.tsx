@@ -1,6 +1,8 @@
 "use client";
 
 import { useCallback, useMemo, useState, type ReactNode } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import type { ContentField, ContentSection } from "@/lib/admin-content-schema";
 import { fullFieldPath } from "@/lib/admin-content-schema";
 import { getAtPath } from "@/lib/admin-path";
@@ -92,7 +94,7 @@ export function SectionCard({
           ) : null}
         </div>
         <span className="em-section-toggle" aria-hidden>
-          ▾
+          <FontAwesomeIcon icon={faChevronDown} />
         </span>
       </button>
       {open && (

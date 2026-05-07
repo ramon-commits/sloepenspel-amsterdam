@@ -10,6 +10,15 @@ import {
   useState,
   type ReactNode,
 } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faCheck,
+  faCircleExclamation,
+  faCircleInfo,
+  faTriangleExclamation,
+  faXmark,
+} from "@fortawesome/free-solid-svg-icons";
+import type { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 
 export type ToastKind = "success" | "error" | "info" | "warning";
 
@@ -34,11 +43,11 @@ const MAX_TOASTS = 3;
 const AUTO_DISMISS_MS = 3000;
 const LEAVE_ANIMATION_MS = 180;
 
-const ICONS: Record<ToastKind, string> = {
-  success: "✓",
-  error: "!",
-  info: "i",
-  warning: "!",
+const ICONS: Record<ToastKind, IconDefinition> = {
+  success: faCheck,
+  error: faCircleExclamation,
+  info: faCircleInfo,
+  warning: faTriangleExclamation,
 };
 
 export function ToastProvider({ children }: { children: ReactNode }) {
@@ -108,7 +117,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
             role={t.kind === "error" ? "alert" : "status"}
           >
             <span className="em-toast-icon" aria-hidden>
-              {ICONS[t.kind]}
+              <FontAwesomeIcon icon={ICONS[t.kind]} />
             </span>
             <span className="em-toast-msg">{t.message}</span>
             <button
@@ -117,7 +126,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
               className="em-toast-close"
               aria-label="Sluit melding"
             >
-              ×
+              <FontAwesomeIcon icon={faXmark} aria-hidden />
             </button>
           </div>
         ))}

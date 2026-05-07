@@ -8,6 +8,12 @@ import {
   type ChangeEvent,
   type DragEvent,
 } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faArrowRight,
+  faRotateRight,
+  faWandMagicSparkles,
+} from "@fortawesome/free-solid-svg-icons";
 import type { ContentField, ContentSource } from "@/lib/admin-content-schema";
 import { useFieldSave } from "../hooks/useFieldSave";
 import { useToast } from "./Toast";
@@ -243,7 +249,7 @@ export function ImageFieldEditor({
           disabled={uploading || !currentUrl}
           title="Pas deze foto aan via kie.ai"
         >
-          ✨ AI aanpassen
+          <FontAwesomeIcon icon={faWandMagicSparkles} aria-hidden /> AI aanpassen
         </button>
         <button
           type="button"
@@ -252,7 +258,7 @@ export function ImageFieldEditor({
           disabled={uploading}
           title="Genereer een nieuwe foto via kie.ai"
         >
-          ✨ AI nieuwe foto
+          <FontAwesomeIcon icon={faWandMagicSparkles} aria-hidden /> AI nieuwe foto
         </button>
       </div>
 
@@ -437,7 +443,7 @@ function AiImageModal({
                 className="em-btn em-btn-primary"
                 onClick={generate}
               >
-                Genereer →
+                Genereer <FontAwesomeIcon icon={faArrowRight} aria-hidden />
               </button>
             </div>
           </>
@@ -472,7 +478,7 @@ function AiImageModal({
                 className="em-btn em-btn-secondary"
                 onClick={() => setState({ phase: "prompt" })}
               >
-                ↻ Opnieuw
+                <FontAwesomeIcon icon={faRotateRight} aria-hidden /> Opnieuw
               </button>
               <button
                 type="button"
