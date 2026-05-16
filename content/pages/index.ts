@@ -2,7 +2,7 @@
 
 export const homePage = {
   hero: {
-    headline: "Hét bedrijfsuitje van Amsterdam",
+    headline: "Hét bedrijfsuitje van Nederland",
     subheadline:
       "Jullie team vaart op eigen sloepen door de grachten, speelt interactieve opdrachten en ontdekt het échte Amsterdam. Alles in één onvergetelijke middag.",
     primaryCta: "Vraag een offerte aan",
